@@ -3,6 +3,18 @@
   unused-packages = true
 
 [[constraint]]
+  name = "github.com/go-sql-driver/mysql"
+  version = "master"
+
+[[constraint]]
+  name = "github.com/lib/pq"
+  version = "master"
+
+[[constraint]]
+  name = "github.com/mattn/go-sqlite3"
+  version = "master"
+
+[[constraint]]
   name = "github.com/loadimpact/k6"
   version = "master"
 
