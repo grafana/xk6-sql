@@ -1,0 +1,8 @@
+[prune]
+  go-tests = true
+  unused-packages = true
+
+[[constraint]]
+  name = "github.com/loadimpact/k6"
+  version = "master"
+
