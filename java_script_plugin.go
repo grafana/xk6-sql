@@ -5,7 +5,7 @@ type plugin struct{}
 var JavaScriptPlugin plugin
 
 func (*plugin) Name() string {
-	return "<NAME>"
+	return "SQL"
 }
 
 func (*plugin) Setup() error {
@@ -18,7 +18,7 @@ func (*plugin) Teardown() error {
 
 func (*plugin) GetModules() map[string]interface{} {
 	mods := map[string]interface{}{
-		"<name>": New(),
+		"sql": New(),
 	}
 	return mods
 }

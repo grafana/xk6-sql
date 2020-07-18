@@ -8,13 +8,13 @@ import (
 	"github.com/loadimpact/k6/stats"
 )
 
-type pluginName struct{}
+type sql struct{}
 
-func New() *pluginName {
-	return &pluginName{}
+func New() *sql {
+	return &sql{}
 }
 
-func (*pluginName) Func(ctx context.Context, count int) error {
+func (*sql) Func(ctx context.Context, count int) error {
 	state, err := GetState(ctx)
 
 	if err == nil {
