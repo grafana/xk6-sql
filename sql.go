@@ -1,4 +1,4 @@
-package main
+package sql
 
 import (
 	dbsql "database/sql"
@@ -7,13 +7,24 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
+
+	k6 "github.com/loadimpact/k6/modules"
 )
 
-type sql struct{}
+func init() {
+	k6.RegisterModule(SQL{})
+}
+
+// SQL is the k6 SQL plugin.
+type SQL struct{}
 type keyValue map[string]interface{}
 
-func New() *sql {
-	return &sql{}
+// K6Module returns the k6 module information.
+func (SQL) K6Module() k6.ModuleInfo {
+	return k6.ModuleInfo{
+		ID:  "sql",
+		New: func() k6.Module { return new(SQL) },
+	}
 }
 
 func contains(array []string, element string) bool {
@@ -25,7 +36,7 @@ func contains(array []string, element string) bool {
 	return false
 }
 
-func (*sql) Open(database string, connectionString string) *dbsql.DB {
+func (*SQL) Open(database string, connectionString string) *dbsql.DB {
 	supportedDatabases := []string{"mysql", "postgres", "sqlite3"}
 	if !contains(supportedDatabases, database) {
 		log.Fatal("Database is not supported")
@@ -41,7 +52,7 @@ func (*sql) Open(database string, connectionString string) *dbsql.DB {
 	return nil
 }
 
-func (*sql) Query(db *dbsql.DB, query string) []keyValue {
+func (*SQL) Query(db *dbsql.DB, query string) []keyValue {
 	rows, _ := db.Query(query)
 	cols, _ := rows.Columns()
 	values := make([]interface{}, len(cols))
@@ -70,3 +81,5 @@ func (*sql) Query(db *dbsql.DB, query string) []keyValue {
 	rows.Close()
 	return result
 }
+
+var _ k6.Module = (*SQL)(nil)
