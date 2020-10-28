@@ -12,20 +12,12 @@ import (
 )
 
 func init() {
-	k6.RegisterModule(SQL{})
+	k6.RegisterModule("sql", new(SQL))
 }
 
 // SQL is the k6 SQL plugin.
 type SQL struct{}
 type keyValue map[string]interface{}
-
-// K6Module returns the k6 module information.
-func (SQL) K6Module() k6.ModuleInfo {
-	return k6.ModuleInfo{
-		ID:  "sql",
-		New: func() k6.Module { return new(SQL) },
-	}
-}
 
 func contains(array []string, element string) bool {
 	for _, item := range array {
@@ -81,5 +73,3 @@ func (*SQL) Query(db *dbsql.DB, query string) []keyValue {
 	rows.Close()
 	return result
 }
-
-var _ k6.Module = (*SQL)(nil)
