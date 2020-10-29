@@ -8,7 +8,7 @@ import (
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 
-	k6 "github.com/loadimpact/k6/modules"
+	k6 "github.com/loadimpact/k6/js/modules"
 )
 
 func init() {

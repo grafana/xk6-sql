@@ -6,9 +6,10 @@ github.com/go-sql-driver/mysql
 github.com/lib/pq
 github.com/lib/pq/oid
 github.com/lib/pq/scram
-# github.com/loadimpact/k6 v0.28.1-0.20201028120302-e512b22c132e
+# github.com/loadimpact/k6 v0.28.1-0.20201029165507-ad3311db721f
 ## explicit
-github.com/loadimpact/k6/modules
+github.com/loadimpact/k6/js/internal/modules
+github.com/loadimpact/k6/js/modules
 # github.com/mattn/go-sqlite3 v1.14.4
 ## explicit
 github.com/mattn/go-sqlite3
