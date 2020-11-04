@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	modules.Register("sql", new(SQL))
+	modules.Register("k6/x/sql", new(SQL))
 }
 
 // SQL is the k6 SQL plugin.
