@@ -1,70 +1,93 @@
-# Disclaimer
-
-The [k6](https://github.com/loadimpact/k6) [plugin system](https://github.com/loadimpact/k6/issues/1353) is currently experimental. This plugin is a proof of concept, and it isn't supported by the k6 team, and may break in the future. USE IT AT YOUR OWN RISK!
-
----
-
 # k6-plugin-sql
 
-Plugin example script:
+This is a [k6](https://github.com/loadimpact/k6) plugin using the
+[xk6](https://github.com/loadimpact/k6) system.
+
+| :exclamation: This is a proof of concept, isn't supported by the k6 team, and may break in the future. USE AT YOUR OWN RISK! |
+|------|
+
+## Build
+
+To build a `k6` binary with this plugin, first ensure you have the prerequisites:
+
+- [Go toolchain](https://go101.org/article/go-toolchain.html)
+- A build toolchain for your system that includes `gcc` or another C compiler.
+  On Debian and derivatives install the `build-essential` package.
+  This is needed because of the SQL dependencies.
+- Git
+
+Then:
+
+1. Clone `xk6`:
+  ```shell
+  git clone https://github.com/k6io/xk6.git
+  cd xk6
+  ```
+
+2. Build the binary:
+  ```shell
+  CGO_ENABLED=1 go run ./cmd/xk6/main.go build master \
+    --with github.com/imiric/k6-plugin-sql
+  ```
+
+## Example
 
 ```javascript
-import { check } from 'k6';
-import { open, query } from 'k6-plugin/sql';  // import sql plugin
+// script.js
+import sql from 'k6/x/sql';
+
+const db = sql.open("sqlite3", "./test.db");
+
+export function setup() {
+  db.exec(`CREATE TABLE IF NOT EXISTS keyvalues (
+           id integer PRIMARY KEY AUTOINCREMENT,
+           key varchar NOT NULL,
+           value varchar);`);
+}
+
+export function teardown() {
+  db.close();
+}
 
 export default function () {
-    let db = open("sqlite3", "./test.sqlite");
-    db.exec(`CREATE TABLE IF NOT EXISTS keyvalues (
-        id integer PRIMARY KEY AUTOINCREMENT,
-        key varchar NOT NULL,
-        value varchar);`);
-    db.exec("INSERT INTO keyvalues (key, value) VALUES('plugin-name', 'k6-plugin-sql');");
-    let results = query(db, "SELECT * FROM keyvalues;");
-    results.forEach(row => {
-        check(row, {
-            "correct key/value": r => r['key'] == 'plugin-name' && r['value'] == 'k6-plugin-sql'
-        });
-    });
-    db.close();
+  db.exec("INSERT INTO keyvalues (key, value) VALUES('plugin-name', 'k6-plugin-sql');");
+
+  let results = sql.query(db, "SELECT * FROM keyvalues;");
+  for (const row of results) {
+    console.log(`key: ${row.key}, value: ${row.value}`);
+  }
 }
 ```
 
 Result output:
 
-```bash
-$ ./build.sh && ./k6 run --iterations 1 --plugin=sql.so test.js
+```shell
+$ ./k6 run script.js
 
-          /\      |‾‾|  /‾‾/  /‾/
-     /\  /  \     |  |_/  /  / /
-    /  \/    \    |      |  /  ‾‾\  
-   /          \   |  |‾\  \ | (_) |
-  / __________ \  |__|  \__\ \___/ .io
-
-  execution: local
-    plugins: SQL
-     output: -
-     script: test.js
-
-    duration: -,  iterations: 1
-         vus: 1,
+          /\      |‾‾| /‾‾/   /‾‾/
+     /\  /  \     |  |/  /   /  /
+    /  \/    \    |     (   /   ‾‾\
+   /          \   |  |\  \ |  (‾)  |
+  / __________ \  |__| \__\ \_____/ .io
 
   execution: local
-     script: test.js
+     script: /tmp/script.js
      output: -
 
-  scenarios: (100.00%) 1 executors, 1 max VUs, 10m30s max duration (incl. graceful stop):
-           * default: 1 iterations shared among 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)
+  scenarios: (100.00%) 1 scenario, 1 max VUs, 10m30s max duration (incl. graceful stop):
+           * default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)
 
+INFO[0000] key: plugin-name, value: k6-plugin-sql        source=console
 
 running (00m00.1s), 0/1 VUs, 1 complete and 0 interrupted iterations
-default ✓ [======================================] 1 VUs  00m00.0s/10m0s  1/1 shared iters
+default ✓ [======================================] 1 VUs  00m00.0s/10m0s  1/1 iters, 1 per VU
 
+    █ setup
 
-    ✓ correct key/value
+    █ teardown
 
-    checks...............: 100.00% ✓ 1 ✗ 0
-    data_received........: 0 B     0 B/s
-    data_sent............: 0 B     0 B/s
-    iteration_duration...: avg=21.53ms min=21.53ms med=21.53ms max=21.53ms p(90)=21.53ms p(95)=21.53ms
-    iterations...........: 1       11.747758/s
+    data_received........: 0 B 0 B/s
+    data_sent............: 0 B 0 B/s
+    iteration_duration...: avg=9.22ms min=19.39µs med=8.86ms max=18.8ms p(90)=16.81ms p(95)=17.8ms
+    iterations...........: 1   15.292228/s
 ```
