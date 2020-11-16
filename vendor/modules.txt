@@ -6,7 +6,7 @@ github.com/go-sql-driver/mysql
 github.com/lib/pq
 github.com/lib/pq/oid
 github.com/lib/pq/scram
-# github.com/loadimpact/k6 v0.28.1-0.20201104120007-a7dbe3f3ac3e
+# github.com/loadimpact/k6 v0.29.0
 ## explicit
 github.com/loadimpact/k6/js/internal/modules
 github.com/loadimpact/k6/js/modules
