@@ -1,4 +1,4 @@
-module github.com/imiric/k6-plugin-sql
+module github.com/imiric/xk6-sql
 
 go 1.15
 
