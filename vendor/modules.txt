@@ -13,3 +13,6 @@ github.com/loadimpact/k6/js/modules
 # github.com/mattn/go-sqlite3 v1.14.4
 ## explicit
 github.com/mattn/go-sqlite3
+# github.com/denisenkom/go-mssqldb v0.9.0
+## explicit
+github.com/denisenkom/go-mssqldb

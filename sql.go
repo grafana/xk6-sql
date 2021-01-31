@@ -7,6 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
+        _ "github.com/denisenkom/go-mssqldb"
 
 	"github.com/loadimpact/k6/js/modules"
 )
@@ -29,7 +30,7 @@ func contains(array []string, element string) bool {
 }
 
 func (*SQL) Open(database string, connectionString string) *dbsql.DB {
-	supportedDatabases := []string{"mysql", "postgres", "sqlite3"}
+	supportedDatabases := []string{"mysql", "postgres", "sqlite3", "sqlserver"}
 	if !contains(supportedDatabases, database) {
 		log.Fatal("Database is not supported")
 		return nil
