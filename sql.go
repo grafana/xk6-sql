@@ -2,7 +2,7 @@ package sql
 
 import (
 	dbsql "database/sql"
-	"log"
+	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
@@ -29,25 +29,29 @@ func contains(array []string, element string) bool {
 	return false
 }
 
-func (*SQL) Open(database string, connectionString string) *dbsql.DB {
+func (*SQL) Open(database string, connectionString string) (*dbsql.DB, error) {
 	supportedDatabases := []string{"mysql", "postgres", "sqlite3", "sqlserver"}
 	if !contains(supportedDatabases, database) {
-		log.Fatal("Database is not supported")
-		return nil
+		return nil, fmt.Errorf("database %s is not supported", database)
 	}
 
 	db, err := dbsql.Open(database, connectionString)
-	if err == nil {
-		return db
+	if err != nil {
+		return nil, err
 	}
 
-	log.Fatal(err)
-	return nil
+	return db, nil
 }
 
-func (*SQL) Query(db *dbsql.DB, query string) []keyValue {
-	rows, _ := db.Query(query)
-	cols, _ := rows.Columns()
+func (*SQL) Query(db *dbsql.DB, query string) ([]keyValue, error) {
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	cols, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
 	values := make([]interface{}, len(cols))
 	valuePtrs := make([]interface{}, len(cols))
 	result := make([]keyValue, 0)
@@ -60,8 +64,7 @@ func (*SQL) Query(db *dbsql.DB, query string) []keyValue {
 		err := rows.Scan(valuePtrs...)
 
 		if err != nil {
-			log.Fatal(err)
-			return nil
+			return nil, err
 		}
 
 		data := make(keyValue, len(cols))
@@ -72,5 +75,5 @@ func (*SQL) Query(db *dbsql.DB, query string) []keyValue {
 	}
 
 	rows.Close()
-	return result
+	return result, nil
 }
