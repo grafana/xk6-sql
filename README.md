@@ -1,7 +1,7 @@
 # k6-plugin-sql
 
-This is a [k6](https://github.com/loadimpact/k6) plugin using the
-[xk6](https://github.com/loadimpact/k6) system.
+This is a [k6](https://github.com/k6io/k6) extension using the
+[xk6](https://github.com/k6io/xk6) system.
 
 | :exclamation: This is a proof of concept, isn't supported by the k6 team, and may break in the future. USE AT YOUR OWN RISK! |
 |------|
@@ -11,22 +11,25 @@ This is a [k6](https://github.com/loadimpact/k6) plugin using the
 To build a `k6` binary with this plugin, first ensure you have the prerequisites:
 
 - [Go toolchain](https://go101.org/article/go-toolchain.html)
-- A build toolchain for your system that includes `gcc` or another C compiler.
-  On Debian and derivatives install the `build-essential` package.
-  This is needed because of the SQL dependencies.
+- If you're using SQLite, a build toolchain for your system that includes `gcc` or another C compiler. On Debian and derivatives install the `build-essential` package.
 - Git
 
 Then:
 
-1. Clone `xk6`:
+1. Install `xk6`:
   ```shell
-  git clone https://github.com/k6io/xk6.git
-  cd xk6
+  go install github.com/k6io/xk6/cmd/xk6@latest
   ```
 
 2. Build the binary:
   ```shell
-  CGO_ENABLED=1 go run ./cmd/xk6/main.go build master \
+  xk6 build master \
+    --with github.com/imiric/xk6-sql
+  ```
+
+  If you're using SQLite, build with CGO enabled:
+  ```shell
+  CGO_ENABLED=1 xk6 build master \
     --with github.com/imiric/xk6-sql
   ```
 
