@@ -1,4 +1,4 @@
-# k6-plugin-sql
+# xk6-sql
 
 This is a [k6](https://github.com/k6io/k6) extension using the
 [xk6](https://github.com/k6io/xk6) system.
