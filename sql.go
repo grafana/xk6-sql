@@ -9,7 +9,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
         _ "github.com/denisenkom/go-mssqldb"
 
-	"github.com/loadimpact/k6/js/modules"
+	"go.k6.io/k6/js/modules"
 )
 
 func init() {
