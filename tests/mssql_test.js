@@ -1,6 +1,8 @@
 import sql from 'k6/x/sql';
 
-const db = sql.open("sqlserver", "./test.db");
+// The second argument is a MS SQL connection string, e.g.
+// Server=127.0.0.1;Database=myDB;User Id=myUser;Password=myPassword;
+const db = sql.open('sqlserver', '');
 
 export function setup() {
   db.exec(`IF object_id('keyvalues') is null
