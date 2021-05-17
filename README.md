@@ -11,7 +11,10 @@ This is a [k6](https://github.com/k6io/k6) extension using the
 To build a `k6` binary with this plugin, first ensure you have the prerequisites:
 
 - [Go toolchain](https://go101.org/article/go-toolchain.html)
-- If you're using SQLite, a build toolchain for your system that includes `gcc` or another C compiler. On Debian and derivatives install the `build-essential` package.
+- If you're using SQLite, a build toolchain for your system that includes `gcc` or
+  another C compiler. On Debian and derivatives install the `build-essential`
+  package. On Windows you can use [tdm-gcc](https://jmeubank.github.io/tdm-gcc/).
+  Make sure that `gcc` is in your `PATH`.
 - Git
 
 Then:
@@ -27,15 +30,14 @@ Then:
     --with github.com/imiric/xk6-sql
   ```
 
-  If you're using SQLite, build with CGO enabled:
+  If you're using SQLite, ensure you have a C compiler installed (see the
+  prerequisites note) and set `CGO_ENABLED=1` in the environment:
   ```shell
   CGO_ENABLED=1 xk6 build master \
     --with github.com/imiric/xk6-sql
   ```
 
-  If you're building on Windows and need SQLite support, you'll also need to setup a
-  C compiler like [tdm-gcc](https://jmeubank.github.io/tdm-gcc/). Ensure that `gcc`
-  is in your `PATH` and run the following two commands:
+  On Windows this is done slightly differently:
   ```shell
   set CGO_ENABLED=1
   xk6 build master --with github.com/imiric/xk6-sql
