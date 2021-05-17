@@ -33,6 +33,15 @@ Then:
     --with github.com/imiric/xk6-sql
   ```
 
+  If you're building on Windows and need SQLite support, you'll also need to setup a
+  C compiler like [tdm-gcc](https://jmeubank.github.io/tdm-gcc/). Ensure that `gcc`
+  is in your `PATH` and run the following two commands:
+  ```shell
+  set CGO_ENABLED=1
+  xk6 build master --with github.com/imiric/xk6-sql
+  ```
+
+
 ## Example
 
 ```javascript
