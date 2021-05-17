@@ -6,6 +6,9 @@ This is a [k6](https://github.com/k6io/k6) extension using the
 | :exclamation: This is a proof of concept, isn't supported by the k6 team, and may break in the future. USE AT YOUR OWN RISK! |
 |------|
 
+Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`. See the [tests](tests)
+directory for examples.
+
 ## Build
 
 To build a `k6` binary with this plugin, first ensure you have the prerequisites:
