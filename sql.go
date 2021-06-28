@@ -43,8 +43,8 @@ func (*SQL) Open(database string, connectionString string) (*dbsql.DB, error) {
 	return db, nil
 }
 
-func (*SQL) Query(db *dbsql.DB, query string) ([]keyValue, error) {
-	rows, err := db.Query(query)
+func (*SQL) Query(db *dbsql.DB, query string, args ...interface{}) ([]keyValue, error) {
+	rows, err := db.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
