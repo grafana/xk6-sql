@@ -19,7 +19,7 @@ export function teardown() {
 export default function () {
   db.exec("INSERT INTO keyvalues ([key], [value]) VALUES('plugin-name', 'k6-plugin-sql');");
 
-  let results = sql.query(db, "SELECT * FROM keyvalues;");
+  let results = sql.query(db, "SELECT * FROM keyvalues WHERE key = $1;", 'plugin-name');
   for (const row of results) {
     console.log(`key: ${row.key}, value: ${row.value}`);
   }
