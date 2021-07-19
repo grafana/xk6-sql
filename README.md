@@ -108,3 +108,7 @@ default ✓ [======================================] 1 VUs  00m00.0s/10m0s  1/1 
     iteration_duration...: avg=9.22ms min=19.39µs med=8.86ms max=18.8ms p(90)=16.81ms p(95)=17.8ms
     iterations...........: 1   15.292228/s
 ```
+
+## See also
+
+- [Load Testing SQL Databases with k6](https://k6.io/blog/load-testing-sql-databases-with-k6/)
