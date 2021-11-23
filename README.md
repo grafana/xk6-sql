@@ -3,9 +3,6 @@
 This is a [k6](https://github.com/grafana/k6) extension using the
 [xk6](https://github.com/grafana/xk6) system.
 
-| :exclamation: This is a proof of concept, isn't supported by the k6 team, and may break in the future. USE AT YOUR OWN RISK! |
-|------|
-
 Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`. See the [tests](tests)
 directory for examples.
 
