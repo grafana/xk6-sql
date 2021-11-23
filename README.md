@@ -1,6 +1,6 @@
 # xk6-sql
 
-This is a [k6](https://github.com/k6io/k6) extension using the
+This is a [k6](https://github.com/grafana/k6) extension using the
 [xk6](https://github.com/grafana/xk6) system.
 
 | :exclamation: This is a proof of concept, isn't supported by the k6 team, and may break in the future. USE AT YOUR OWN RISK! |
@@ -30,20 +30,20 @@ Then:
 2. Build the binary:
   ```shell
   xk6 build master \
-    --with github.com/imiric/xk6-sql
+    --with github.com/grafana/xk6-sql
   ```
 
   If you're using SQLite, ensure you have a C compiler installed (see the
   prerequisites note) and set `CGO_ENABLED=1` in the environment:
   ```shell
   CGO_ENABLED=1 xk6 build master \
-    --with github.com/imiric/xk6-sql
+    --with github.com/grafana/xk6-sql
   ```
 
   On Windows this is done slightly differently:
   ```shell
   set CGO_ENABLED=1
-  xk6 build master --with github.com/imiric/xk6-sql
+  xk6 build master --with github.com/grafana/xk6-sql
   ```
 
 
