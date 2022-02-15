@@ -8,6 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/snowflakedb/gosnowflake"
 
 	"go.k6.io/k6/js/modules"
 )
@@ -30,7 +31,7 @@ func contains(array []string, element string) bool {
 }
 
 func (*SQL) Open(database string, connectionString string) (*dbsql.DB, error) {
-	supportedDatabases := []string{"mysql", "postgres", "sqlite3", "sqlserver"}
+	supportedDatabases := []string{"mysql", "postgres", "sqlite3", "sqlserver", "snowflake"}
 	if !contains(supportedDatabases, database) {
 		return nil, fmt.Errorf("database %s is not supported", database)
 	}
