@@ -23,6 +23,7 @@ export default function () {
 
   let results = sql.query(db, "SELECT * FROM keyvalues WHERE `key` = ?;", 'plugin-name');
   for (const row of results) {
-    console.log(`key: ${String.fromCharCode(...row.key.toString().split(','))}, value: ${String.fromCharCode(...row.value.toString().split(','))}`);
+    // Convert array of ASCII integers into strings. See https://github.com/grafana/xk6-sql/issues/12
+    console.log(`key: ${String.fromCharCode(...row.key)}, value: ${String.fromCharCode(...row.value)}`);
   }
 }
