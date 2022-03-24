@@ -8,7 +8,7 @@ RUN CGO_ENABLED=1 xk6 build \
     --with github.com/grafana/xk6-sql=. \
     --output /tmp/k6
 
-# Create image for running k6 with output for Prometheus Remote Write
+# Create image for running your customized k6
 FROM alpine:3.15
 RUN apk add --no-cache ca-certificates \
     && adduser -D -u 12345 -g 12345 k6
