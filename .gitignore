@@ -16,3 +16,5 @@
 k6
 *.sqlite
 
+.idea/
+.DS_Store

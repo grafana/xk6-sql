@@ -43,7 +43,6 @@ Then:
   xk6 build master --with github.com/grafana/xk6-sql
   ```
 
-
 ## Example
 
 ```javascript
@@ -109,3 +108,23 @@ default ✓ [======================================] 1 VUs  00m00.0s/10m0s  1/1 
 ## See also
 
 - [Load Testing SQL Databases with k6](https://k6.io/blog/load-testing-sql-databases-with-k6/)
+
+## Docker
+For those who do not have a Go development environment available, or simply want
+to run an extended version of `k6` as a container, Docker is an option to build 
+and run the application.
+
+The following command will build a custom `k6` image incorporating the `xk6-sql` extension
+built from the local source files.
+```shell
+docker build -t grafana/k6-for-sql:latest .
+```
+Using this image, you may then execute the [tests/sqlite3_test.js](tests/sqlite3_test.js) script 
+by running the following command:
+```shell
+docker run -v $PWD:/scripts -it --rm grafana/k6-for-sql:latest run /scripts/tests/sqlite3_test.js
+```
+For those on Mac or Linux, the `docker-run.sh` script simplifies the command:
+```shell
+./docker-run.sh tests/sqlite3_test.js
+```
