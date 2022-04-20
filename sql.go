@@ -3,21 +3,38 @@ package sql
 import (
 	dbsql "database/sql"
 	"fmt"
-
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
-
 	"go.k6.io/k6/js/modules"
 )
 
 func init() {
-	modules.Register("k6/x/sql", new(SQL))
+	modules.Register("k6/x/sql", new(ModuleInstance))
+}
+
+// ModuleInstance represents an instance of the SQL module for every VU.
+type ModuleInstance struct {
+	*SQL
+}
+
+// NewModuleInstance implements the modules.Module interface to return
+// a new instance for each VU.
+func (*ModuleInstance) NewModuleInstance(vu modules.VU) modules.Instance {
+	return &SQL{}
 }
 
 // SQL is the k6 SQL plugin.
 type SQL struct{}
+
+// Exports implements the modules.Instance interface and returns the exports
+// of the JS module.
+func (sql *SQL) Exports() modules.Exports {
+	return modules.Exports{Default: sql}
+}
+
+// keyValue is a simple key-value pair.
 type keyValue map[string]interface{}
 
 func contains(array []string, element string) bool {
@@ -29,6 +46,8 @@ func contains(array []string, element string) bool {
 	return false
 }
 
+// Open establishes a connection to the specified database type using
+// the provided connection string.
 func (*SQL) Open(database string, connectionString string) (*dbsql.DB, error) {
 	supportedDatabases := []string{"mysql", "postgres", "sqlite3", "sqlserver"}
 	if !contains(supportedDatabases, database) {
@@ -43,6 +62,8 @@ func (*SQL) Open(database string, connectionString string) (*dbsql.DB, error) {
 	return db, nil
 }
 
+// Query executes the provided query string against the database, while
+// providing results as a slice of KeyValue instance(s) if available.
 func (*SQL) Query(db *dbsql.DB, query string, args ...interface{}) ([]keyValue, error) {
 	rows, err := db.Query(query, args...)
 	if err != nil {
