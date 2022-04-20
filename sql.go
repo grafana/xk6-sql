@@ -11,22 +11,29 @@ import (
 )
 
 func init() {
-	modules.Register("k6/x/sql", new(ModuleInstance))
+	modules.Register("k6/x/sql", new(RootModule))
 }
 
-// ModuleInstance represents an instance of the SQL module for every VU.
-type ModuleInstance struct {
-	*SQL
+// RootModule is the global module object type. It is instantiated once per test
+// run and will be used to create `k6/x/sql` module instances for each VU.
+type RootModule struct{}
+
+// SQL represents an instance of the SQL module for every VU.
+type SQL struct {
+	vu modules.VU
 }
+
+// Ensure the interfaces are implemented correctly.
+var (
+	_ modules.Module   = &RootModule{}
+	_ modules.Instance = &SQL{}
+)
 
 // NewModuleInstance implements the modules.Module interface to return
 // a new instance for each VU.
-func (*ModuleInstance) NewModuleInstance(vu modules.VU) modules.Instance {
-	return &SQL{}
+func (*RootModule) NewModuleInstance(vu modules.VU) modules.Instance {
+	return &SQL{vu: vu}
 }
-
-// SQL is the k6 SQL plugin.
-type SQL struct{}
 
 // Exports implements the modules.Instance interface and returns the exports
 // of the JS module.
