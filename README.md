@@ -26,22 +26,31 @@ Then:
 
 2. Build the binary:
   ```shell
-  xk6 build master \
-    --with github.com/grafana/xk6-sql
+  xk6 build --with github.com/grafana/xk6-sql
   ```
 
   If you're using SQLite, ensure you have a C compiler installed (see the
   prerequisites note) and set `CGO_ENABLED=1` in the environment:
   ```shell
-  CGO_ENABLED=1 xk6 build master \
-    --with github.com/grafana/xk6-sql
+  CGO_ENABLED=1 xk6 build --with github.com/grafana/xk6-sql
   ```
 
   On Windows this is done slightly differently:
   ```shell
   set CGO_ENABLED=1
-  xk6 build master --with github.com/grafana/xk6-sql
+  xk6 build --with github.com/grafana/xk6-sql
   ```
+
+## Development
+To make development a little smoother, use the `Makefile` in the root folder. The default target will format your code, run tests, and create a `k6` binary with your local code rather than from GitHub.
+
+```bash
+make
+```
+Once built, you can run your newly extended `k6` using:
+```shell
+ ./k6 run tests/sqlite3_test.js
+ ```
 
 ## Example
 
