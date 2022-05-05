@@ -7,7 +7,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/lib/pq v1.10.4
 	github.com/mattn/go-sqlite3 v1.14.12
-	go.k6.io/k6 v0.37.0
+	go.k6.io/k6 v0.38.0
 )
 
 require github.com/dop251/goja v0.0.0-20220405120441-9037c2b61cbf // indirect
