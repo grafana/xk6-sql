@@ -2,7 +2,7 @@ import sql from 'k6/x/sql';
 
 // The second argument is a Oracle connection string, e.g.
 // myuser:mypass@tcp(127.0.0.1:3306)/mydb
-const db = sql.open('oci8', '');
+const db = sql.open('godror', '');
 
 export function setup() {
   db.exec(`
