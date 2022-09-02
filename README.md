@@ -1,9 +1,9 @@
 # xk6-sql
 
 This is a [k6](https://github.com/grafana/k6) extension using the
-[xk6](https://github.com/grafana/xk6) system.
+[xk6](https://github.com/grafana/xk6) system. This extension was improved by including the Go [DRiver for ORacle](https://github.com/godror/godror) which allows connecting to an Oracle database too.
 
-Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`, `oracle`. See the [tests](tests)
+Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`, `godror` (oracle). See the [tests](tests)
 directory for examples.
 
 ## Build
