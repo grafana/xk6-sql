@@ -29,7 +29,7 @@ Then:
   xk6 build --with github.com/stefnedelchev/xk6-sql-with-oracle
   ```
 
-  If you're using SQLite, ensure you have a C compiler installed (see the
+  If you're using SQLite or Oracle, ensure you have a C compiler installed (see the
   prerequisites note) and set `CGO_ENABLED=1` in the environment:
   ```shell
   CGO_ENABLED=1 xk6 build --with github.com/stefnedelchev/xk6-sql-with-oracle
