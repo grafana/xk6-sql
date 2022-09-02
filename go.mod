@@ -1,4 +1,4 @@
-module github.com/grafana/xk6-sql
+module github.com/stefnedelchev/xk6-sql
 
 go 1.17
 
