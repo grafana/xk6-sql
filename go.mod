@@ -8,6 +8,7 @@ require (
 	github.com/lib/pq v1.10.4
 	github.com/mattn/go-sqlite3 v1.14.12
 	go.k6.io/k6 v0.38.0
+	github.com/mattn/go-oci8 v0.1.1
 )
 
 require github.com/dop251/goja v0.0.0-20220405120441-9037c2b61cbf // indirect
