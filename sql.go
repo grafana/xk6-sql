@@ -7,7 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
-	_ "github.com/mattn/go-oci8"
+	_ "github.com/godror/godror"
 	"go.k6.io/k6/js/modules"
 )
 
@@ -57,7 +57,7 @@ func contains(array []string, element string) bool {
 // Open establishes a connection to the specified database type using
 // the provided connection string.
 func (*SQL) Open(database string, connectionString string) (*dbsql.DB, error) {
-	supportedDatabases := []string{"mysql", "postgres", "sqlite3", "sqlserver", "oracle", "oci8"}
+	supportedDatabases := []string{"mysql", "postgres", "sqlite3", "sqlserver", "oracle", "oci8", "godror"}
 	if !contains(supportedDatabases, database) {
 		return nil, fmt.Errorf("database %s is not supported", database)
 	}
