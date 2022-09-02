@@ -26,19 +26,19 @@ Then:
 
 2. Build the binary:
   ```shell
-  xk6 build --with github.com/stefnedelchev/xk6-sql
+  xk6 build --with github.com/stefnedelchev/xk6-sql-with-oracle
   ```
 
   If you're using SQLite, ensure you have a C compiler installed (see the
   prerequisites note) and set `CGO_ENABLED=1` in the environment:
   ```shell
-  CGO_ENABLED=1 xk6 build --with github.com/stefnedelchev/xk6-sql
+  CGO_ENABLED=1 xk6 build --with github.com/stefnedelchev/xk6-sql-with-oracle
   ```
 
   On Windows this is done slightly differently:
   ```shell
   set CGO_ENABLED=1
-  xk6 build --with github.com/stefnedelchev/xk6-sql
+  xk6 build --with github.com/stefnedelchev/xk6-sql-with-oracle
   ```
 
 ## Development
