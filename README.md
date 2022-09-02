@@ -26,19 +26,19 @@ Then:
 
 2. Build the binary:
   ```shell
-  xk6 build --with github.com/grafana/xk6-sql
+  xk6 build --with github.com/stefnedelchev/xk6-sql
   ```
 
   If you're using SQLite, ensure you have a C compiler installed (see the
   prerequisites note) and set `CGO_ENABLED=1` in the environment:
   ```shell
-  CGO_ENABLED=1 xk6 build --with github.com/grafana/xk6-sql
+  CGO_ENABLED=1 xk6 build --with github.com/stefnedelchev/xk6-sql
   ```
 
   On Windows this is done slightly differently:
   ```shell
   set CGO_ENABLED=1
-  xk6 build --with github.com/grafana/xk6-sql
+  xk6 build --with github.com/stefnedelchev/xk6-sql
   ```
 
 ## Development
@@ -126,12 +126,12 @@ and run the application.
 The following command will build a custom `k6` image incorporating the `xk6-sql` extension
 built from the local source files.
 ```shell
-docker build -t grafana/k6-for-sql:latest .
+docker build -t stefnedelchev/k6-for-sql:latest .
 ```
 Using this image, you may then execute the [tests/sqlite3_test.js](tests/sqlite3_test.js) script 
 by running the following command:
 ```shell
-docker run -v $PWD:/scripts -it --rm grafana/k6-for-sql:latest run /scripts/tests/sqlite3_test.js
+docker run -v $PWD:/scripts -it --rm stefnedelchev/k6-for-sql:latest run /scripts/tests/sqlite3_test.js
 ```
 For those on Mac or Linux, the `docker-run.sh` script simplifies the command:
 ```shell
