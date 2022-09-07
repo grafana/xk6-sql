@@ -1,7 +1,7 @@
 # xk6-sql
 
 This is a [k6](https://github.com/grafana/k6) extension using the
-[xk6](https://github.com/grafana/xk6) system. This extension was improved by including the Go [DRiver for ORacle](https://github.com/godror/godror) which allows connecting to an Oracle database too.
+[xk6](https://github.com/grafana/xk6) system. This extension was improved by including the [Go DRiver for ORacle](https://github.com/godror/godror) which allows connecting to an Oracle database too.
 
 Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`, `godror` (oracle). See the [tests](tests)
 directory for examples.
@@ -49,7 +49,7 @@ make
 ```
 Once built, you can run your newly extended `k6` using:
 ```shell
- ./k6 run tests/sqlite3_test.js
+ ./k6 run tests/oracle_test.js
  ```
 
 ## Example
@@ -58,7 +58,7 @@ Once built, you can run your newly extended `k6` using:
 // script.js
 import sql from 'k6/x/sql';
 
-const db = sql.open("sqlite3", "./test.db");
+const db = sql.open('godror', 'scott/pw@mydbhost.example.com/orclpdb1');
 
 export function setup() {
   db.exec(`CREATE TABLE IF NOT EXISTS keyvalues (
