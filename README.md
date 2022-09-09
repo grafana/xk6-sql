@@ -58,7 +58,7 @@ Once built, you can run your newly extended `k6` using:
 // script.js
 import sql from 'k6/x/sql';
 
-const db = sql.open('godror', 'scott/pw@mydbhost.example.com/orclpdb1');
+const db = sql.open('godror', `user="johndoe" password="123456" connectString="dbhost:1521/dbname"`);
 
 export function setup() {
   db.exec(`CREATE TABLE IF NOT EXISTS keyvalues (
