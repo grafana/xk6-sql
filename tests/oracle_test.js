@@ -1,7 +1,7 @@
 import sql from 'k6/x/sql';
 
 // The second argument is a Oracle connection string, e.g.
-// myuser:mypass@tcp(127.0.0.1:3306)/mydb
+// `user="johndoe" password="123456" connectString="dbhost:1521/dbname"`
 const db = sql.open('godror', '');
 
 export function setup() {
@@ -21,7 +21,7 @@ export function teardown() {
 export default function () {
   db.exec("INSERT INTO keyvalues (`key`, value) VALUES('plugin-name', 'k6-plugin-sql');");
 
-  let results = sql.query(db, "SELECT * FROM keyvalues WHERE `key` = ?;", 'plugin-name');
+  let results = sql.query(db, "SELECT * FROM keyvalues WHERE `key` = :1", 'plugin-name');
   for (const row of results) {
     // Convert array of ASCII integers into strings. See https://github.com/grafana/xk6-sql/issues/12
     console.log(`key: ${String.fromCharCode(...row.key)}, value: ${String.fromCharCode(...row.value)}`);
