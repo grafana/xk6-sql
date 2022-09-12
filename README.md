@@ -1,9 +1,9 @@
 # xk6-sql
 
 This is a [k6](https://github.com/grafana/k6) extension using the
-[xk6](https://github.com/grafana/xk6) system. This extension was improved by including the [Go DRiver for ORacle](https://github.com/godror/godror) which allows connecting to an Oracle database too.
+[xk6](https://github.com/grafana/xk6) system.
 
-Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`, `godror` (oracle). See the [tests](tests)
+Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`, `godror` (Oracle). See the [tests](tests)
 directory for examples.
 
 ## Build
@@ -26,19 +26,19 @@ Then:
 
 2. Build the binary:
   ```shell
-  xk6 build --with github.com/stefnedelchev/xk6-sql-with-oracle
+  xk6 build --with github.com/grafana/xk6-sql
   ```
 
-  If you're using SQLite or Oracle, ensure you have a C compiler installed (see the
+  If you're using SQLite, ensure you have a C compiler installed (see the
   prerequisites note) and set `CGO_ENABLED=1` in the environment:
   ```shell
-  CGO_ENABLED=1 xk6 build --with github.com/stefnedelchev/xk6-sql-with-oracle
+  CGO_ENABLED=1 xk6 build --with github.com/grafana/xk6-sql
   ```
 
   On Windows this is done slightly differently:
   ```shell
   set CGO_ENABLED=1
-  xk6 build --with github.com/stefnedelchev/xk6-sql-with-oracle
+  xk6 build --with github.com/grafana/xk6-sql
   ```
 
 ## Development
@@ -49,7 +49,7 @@ make
 ```
 Once built, you can run your newly extended `k6` using:
 ```shell
- ./k6 run tests/oracle_test.js
+ ./k6 run tests/sqlite3_test.js
  ```
 
 ## Example
@@ -58,7 +58,7 @@ Once built, you can run your newly extended `k6` using:
 // script.js
 import sql from 'k6/x/sql';
 
-const db = sql.open('godror', `user="johndoe" password="123456" connectString="dbhost:1521/dbname"`);
+const db = sql.open("sqlite3", "./test.db");
 
 export function setup() {
   db.exec(`CREATE TABLE IF NOT EXISTS keyvalues (
@@ -126,12 +126,12 @@ and run the application.
 The following command will build a custom `k6` image incorporating the `xk6-sql` extension
 built from the local source files.
 ```shell
-docker build -t stefnedelchev/k6-for-sql:latest .
+docker build -t grafana/k6-for-sql:latest .
 ```
 Using this image, you may then execute the [tests/sqlite3_test.js](tests/sqlite3_test.js) script 
 by running the following command:
 ```shell
-docker run -v $PWD:/scripts -it --rm stefnedelchev/k6-for-sql:latest run /scripts/tests/sqlite3_test.js
+docker run -v $PWD:/scripts -it --rm grafana/k6-for-sql:latest run /scripts/tests/sqlite3_test.js
 ```
 For those on Mac or Linux, the `docker-run.sh` script simplifies the command:
 ```shell

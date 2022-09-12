@@ -1,7 +1,7 @@
 import sql from 'k6/x/sql';
 
 // The second argument is a Oracle connection string, e.g.
-// `user="johndoe" password="123456" connectString="dbhost:1521/dbname"`
+// `user="myuser" password="mypass" connectString="127.0.0.1:1521/mydb"`
 const db = sql.open('godror', '');
 
 export function setup() {
