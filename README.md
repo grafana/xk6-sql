@@ -3,9 +3,9 @@
 This is a [k6](https://github.com/grafana/k6) extension using the
 [xk6](https://github.com/grafana/xk6) system.
 
-Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`. See the [tests](tests)
-directory for examples. Other RDBMSs are not supported, see
-[details below](#support-for-other-rdbmss).
+Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`, `databricks`. See the [tests](tests)
+directory for examples.
+Databricks driver source [here](https://github.com/databricks/databricks-sql-go)
 
 
 ## Build
@@ -60,7 +60,7 @@ Once built, you can run your newly extended `k6` using:
 // script.js
 import sql from 'k6/x/sql';
 
-const db = sql.open("sqlite3", "./test.db");
+const db = sql.open("databricks", "databricks://:dapi********@********.databricks.com/sql/1.0/endpoints/********");
 
 export function setup() {
   db.exec(`CREATE TABLE IF NOT EXISTS keyvalues (
@@ -119,22 +119,6 @@ default ✓ [======================================] 1 VUs  00m00.0s/10m0s  1/1 
 ## See also
 
 - [Load Testing SQL Databases with k6](https://k6.io/blog/load-testing-sql-databases-with-k6/)
-
-### Support for other RDBMSs
-
-Note that this project is not accepting support for additional SQL implementations
-and RDBMSs. See the discussion in [issue #17](https://github.com/grafana/xk6-sql/issues/17)
-for the reasoning.
-
-There are however forks of this project that add additional support for:
-- [Oracle](https://github.com/stefnedelchev/xk6-sql-with-oracle)
-- [Snowflake](https://github.com/libertymutual/xk6-sql)
-
-You can build k6 binaries by simply specifying these project URLs in `xk6 build`.
-E.g. `CGO_ENABLED=1 xk6 build --with github.com/stefnedelchev/xk6-sql-with-oracle`.
-Please report any issues with these extensions in their respective GitHub issue trackers,
-and not in grafana/xk6-sql.
-
 
 ## Docker
 

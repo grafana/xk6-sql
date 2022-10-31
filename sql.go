@@ -3,6 +3,7 @@ package sql
 import (
 	dbsql "database/sql"
 	"fmt"
+	_ "github.com/databricks/databricks-sql-go"
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
@@ -56,7 +57,7 @@ func contains(array []string, element string) bool {
 // Open establishes a connection to the specified database type using
 // the provided connection string.
 func (*SQL) Open(database string, connectionString string) (*dbsql.DB, error) {
-	supportedDatabases := []string{"mysql", "postgres", "sqlite3", "sqlserver"}
+	supportedDatabases := []string{"mysql", "postgres", "sqlite3", "sqlserver", "databricks"}
 	if !contains(supportedDatabases, database) {
 		return nil, fmt.Errorf("database %s is not supported", database)
 	}
