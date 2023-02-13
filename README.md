@@ -127,11 +127,11 @@ and RDBMSs. See the discussion in [issue #17](https://github.com/grafana/xk6-sql
 for the reasoning.
 
 There are however forks of this project that add additional support for:
-- [Oracle](https://github.com/stefnedelchev/xk6-sql-with-oracle)
+- [Oracle](https://github.com/stefnedelchevbrady/xk6-sql-with-oracle)
 - [Snowflake](https://github.com/libertymutual/xk6-sql)
 
 You can build k6 binaries by simply specifying these project URLs in `xk6 build`.
-E.g. `CGO_ENABLED=1 xk6 build --with github.com/stefnedelchev/xk6-sql-with-oracle`.
+E.g. `CGO_ENABLED=1 xk6 build --with github.com/stefnedelchevbrady/xk6-sql-with-oracle`.
 Please report any issues with these extensions in their respective GitHub issue trackers,
 and not in grafana/xk6-sql.
 
