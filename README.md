@@ -3,8 +3,8 @@
 This is a [k6](https://github.com/grafana/k6) extension using the
 [xk6](https://github.com/grafana/xk6) system.
 
-Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`. See the [tests](tests)
-directory for examples. Other RDBMSs are not supported, see
+Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`. See the [examples](examples)
+directory for usage. Other RDBMSs are not supported, see
 [details below](#support-for-other-rdbmss).
 
 
@@ -51,7 +51,7 @@ make
 ```
 Once built, you can run your newly extended `k6` using:
 ```shell
- ./k6 run tests/sqlite3_test.js
+ ./k6 run examples/sqlite3_test.js
  ```
 
 ## Example
@@ -147,12 +147,12 @@ built from the local source files.
 ```shell
 docker build -t grafana/k6-for-sql:latest .
 ```
-Using this image, you may then execute the [tests/sqlite3_test.js](tests/sqlite3_test.js) script
+Using this image, you may then execute the [examples/sqlite3_test.js](examples/sqlite3_test.js) script
 by running the following command:
 ```shell
-docker run -v $PWD:/scripts -it --rm grafana/k6-for-sql:latest run /scripts/tests/sqlite3_test.js
+docker run -v $PWD:/scripts -it --rm grafana/k6-for-sql:latest run /scripts/examples/sqlite3_test.js
 ```
 For those on Mac or Linux, the `docker-run.sh` script simplifies the command:
 ```shell
-./docker-run.sh tests/sqlite3_test.js
+./docker-run.sh examples/sqlite3_test.js
 ```
