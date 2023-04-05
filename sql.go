@@ -1,8 +1,11 @@
+// Package sql provides a javascript module for performing SQL actions against relational databases
 package sql
 
 import (
 	dbsql "database/sql"
 	"fmt"
+
+	// Blank imports required for initialization of drivers
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
@@ -41,8 +44,8 @@ func (sql *SQL) Exports() modules.Exports {
 	return modules.Exports{Default: sql}
 }
 
-// keyValue is a simple key-value pair.
-type keyValue map[string]interface{}
+// KeyValue is a simple key-value pair.
+type KeyValue map[string]interface{}
 
 func contains(array []string, element string) bool {
 	for _, item := range array {
@@ -71,37 +74,43 @@ func (*SQL) Open(database string, connectionString string) (*dbsql.DB, error) {
 
 // Query executes the provided query string against the database, while
 // providing results as a slice of KeyValue instance(s) if available.
-func (*SQL) Query(db *dbsql.DB, query string, args ...interface{}) ([]keyValue, error) {
+func (*SQL) Query(db *dbsql.DB, query string, args ...interface{}) ([]KeyValue, error) {
 	rows, err := db.Query(query, args...)
+	defer func() {
+		_ = rows.Close()
+	}()
 	if err != nil {
 		return nil, err
 	}
+	if rows.Err() != nil {
+		return nil, rows.Err()
+	}
+
 	cols, err := rows.Columns()
 	if err != nil {
 		return nil, err
 	}
+
 	values := make([]interface{}, len(cols))
 	valuePtrs := make([]interface{}, len(cols))
-	result := make([]keyValue, 0)
+	result := make([]KeyValue, 0)
 
 	for rows.Next() {
 		for i := range values {
 			valuePtrs[i] = &values[i]
 		}
 
-		err := rows.Scan(valuePtrs...)
-
+		err = rows.Scan(valuePtrs...)
 		if err != nil {
 			return nil, err
 		}
 
-		data := make(keyValue, len(cols))
+		data := make(KeyValue, len(cols))
 		for i, colName := range cols {
-			data[colName] = *valuePtrs[i].(*interface{})
+			data[colName] = *valuePtrs[i].(*interface{}) //nolint:forcetypeassert
 		}
 		result = append(result, data)
 	}
 
-	rows.Close()
 	return result, nil
 }

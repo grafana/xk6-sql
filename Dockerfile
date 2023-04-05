@@ -1,5 +1,5 @@
 # Multi-stage build to generate custom k6 with extension
-FROM golang:1.18-alpine as builder
+FROM golang:1.20-alpine as builder
 WORKDIR $GOPATH/src/go.k6.io/k6
 ADD . .
 RUN apk --no-cache add build-base git
@@ -9,7 +9,7 @@ RUN CGO_ENABLED=1 xk6 build \
     --output /tmp/k6
 
 # Create image for running your customized k6
-FROM alpine:3.15
+FROM alpine:3.17
 RUN apk add --no-cache ca-certificates \
     && adduser -D -u 12345 -g 12345 k6
 COPY --from=builder /tmp/k6 /usr/bin/k6
