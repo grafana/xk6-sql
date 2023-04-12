@@ -15,6 +15,7 @@ help:
 ## clean: Removes any previously created build artifacts.
 clean:
 	rm -f ./k6
+	rm -f ./intg_test.db
 
 ## build: Builds a custom 'k6' with the local extension. 
 build:

@@ -2,8 +2,8 @@
 
 set -e
 
-if [ $# -ne 1 ]; then
-    echo "Usage: ./docker-run.sh <SCRIPT_NAME>"
+if [ $# -lt 1 ]; then
+    echo "Usage: ./docker-run.sh <SCRIPT_NAME> [additional k6 args]"
     exit 1
 fi
 
@@ -11,4 +11,4 @@ fi
 # If not, override the name on the command-line with `IMAGE_NAME=...`.
 IMAGE_NAME=${IMAGE_NAME:="grafana/k6-for-sql:latest"}
 
-docker run -v $PWD:/scripts -it --rm $IMAGE_NAME run /scripts/$1
+docker run -v $PWD:/scripts -it --rm $IMAGE_NAME run /scripts/$1 ${@:2}
