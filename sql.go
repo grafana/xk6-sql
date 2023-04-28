@@ -76,12 +76,13 @@ func (*SQL) Open(database string, connectionString string) (*dbsql.DB, error) {
 // providing results as a slice of KeyValue instance(s) if available.
 func (*SQL) Query(db *dbsql.DB, query string, args ...interface{}) ([]KeyValue, error) {
 	rows, err := db.Query(query, args...)
-	defer func() {
-		_ = rows.Close()
-	}()
 	if err != nil {
 		return nil, err
 	}
+
+	defer func() {
+		_ = rows.Close()
+	}()
 	if rows.Err() != nil {
 		return nil, rows.Err()
 	}
