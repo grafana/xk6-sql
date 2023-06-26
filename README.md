@@ -28,19 +28,19 @@ Then:
 
 2. Build the binary:
   ```shell
-  xk6 build --with github.com/grafana/xk6-sql
+  xk6 build --replace golang.org/x/net=golang.org/x/net@latest --with github.com/grafana/xk6-sql
   ```
 
   If you're using SQLite, ensure you have a C compiler installed (see the
   prerequisites note) and set `CGO_ENABLED=1` in the environment:
   ```shell
-  CGO_ENABLED=1 xk6 build --with github.com/grafana/xk6-sql
+  CGO_ENABLED=1 xk6 build --replace golang.org/x/net=golang.org/x/net@latest --with github.com/grafana/xk6-sql
   ```
 
   On Windows this is done slightly differently:
   ```shell
   set CGO_ENABLED=1
-  xk6 build --with github.com/grafana/xk6-sql
+  xk6 build --replace golang.org/x/net=golang.org/x/net@latest --with github.com/grafana/xk6-sql
   ```
 
 ## Development
