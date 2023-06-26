@@ -5,6 +5,7 @@ ADD . .
 RUN apk --no-cache add build-base git
 RUN go install go.k6.io/xk6/cmd/xk6@latest
 RUN CGO_ENABLED=1 xk6 build \
+    --replace golang.org/x/net=golang.org/x/net@latest \
     --with github.com/grafana/xk6-sql=. \
     --output /tmp/k6
 
