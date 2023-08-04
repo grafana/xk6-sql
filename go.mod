@@ -9,7 +9,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.17
 	github.com/sirupsen/logrus v1.9.3
 	github.com/stretchr/testify v1.8.4
-	go.k6.io/k6 v0.45.0
+	go.k6.io/k6 v0.45.1
 )
 
 require (
