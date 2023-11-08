@@ -14,6 +14,7 @@ require (
 
 require (
 	github.com/dop251/goja v0.0.0-20230707174833-636fdf960de1
+	github.com/sijms/go-ora/v2 v2.7.19
 	github.com/spf13/afero v1.9.5
 )
 
