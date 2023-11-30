@@ -3,7 +3,6 @@ module github.com/grafana/xk6-sql
 go 1.19
 
 require (
-	github.com/denisenkom/go-mssqldb v0.12.3
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/lib/pq v1.10.9
 	github.com/mattn/go-sqlite3 v1.14.18
@@ -14,6 +13,7 @@ require (
 
 require (
 	github.com/dop251/goja v0.0.0-20231027120936-b396bb4c349d
+	github.com/microsoft/go-mssqldb v1.6.0
 	github.com/spf13/afero v1.11.0
 )
 

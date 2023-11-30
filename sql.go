@@ -6,10 +6,10 @@ import (
 	"fmt"
 
 	// Blank imports required for initialization of drivers
-	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/microsoft/go-mssqldb"
 	"go.k6.io/k6/js/modules"
 )
 
