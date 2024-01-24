@@ -3,7 +3,7 @@
 This is a [k6](https://github.com/grafana/k6) extension using the
 [xk6](https://github.com/grafana/xk6) system.
 
-Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`. See the [examples](examples)
+Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`, `azuresql`. See the [examples](examples)
 directory for usage. Other RDBMSs are not supported, see
 [details below](#support-for-other-rdbmss).
 
