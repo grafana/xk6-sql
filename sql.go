@@ -10,6 +10,7 @@ import (
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 	_ "github.com/microsoft/go-mssqldb"
+	_ "github.com/microsoft/go-mssqldb/azuread"
 	"go.k6.io/k6/js/modules"
 )
 
@@ -59,7 +60,7 @@ func contains(array []string, element string) bool {
 // Open establishes a connection to the specified database type using
 // the provided connection string.
 func (*SQL) Open(database string, connectionString string) (*dbsql.DB, error) {
-	supportedDatabases := []string{"mysql", "postgres", "sqlite3", "sqlserver"}
+	supportedDatabases := []string{"mysql", "postgres", "sqlite3", "sqlserver", "azuresql"}
 	if !contains(supportedDatabases, database) {
 		return nil, fmt.Errorf("database %s is not supported", database)
 	}
