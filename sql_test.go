@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/afero"
 
-	"github.com/dop251/goja"
+	"github.com/grafana/sobek"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/require"
 	"go.k6.io/k6/js/common"
@@ -62,8 +62,8 @@ db.close()
 	require.NoError(t, err)
 }
 
-func setupTestEnv(t *testing.T) *goja.Runtime {
-	rt := goja.New()
+func setupTestEnv(t *testing.T) *sobek.Runtime {
+	rt := sobek.New()
 	rt.SetFieldNameMapper(common.FieldNameMapper{})
 
 	testLog := logrus.New()
