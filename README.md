@@ -7,6 +7,13 @@ Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`, `azuresql`, `clic
 directory for usage. Other RDBMSs are not supported, see
 [details below](#support-for-other-rdbmss).
 
+## Table of Contents
+- [Build](#build)
+- [Development](#development)
+- [Example](#example)
+  - [TLS support](#tls-support)
+  - [Support for other RDBMSs](#support-for-other-rdbmss)
+- [Docker](#docker)
 
 ## Build
 
@@ -116,9 +123,28 @@ default ✓ [======================================] 1 VUs  00m00.0s/10m0s  1/1 
     iterations...........: 1   15.292228/s
 ```
 
-## See also
+#### See also
 
 - [Load Testing SQL Databases with k6](https://k6.io/blog/load-testing-sql-databases-with-k6/)
+
+### TLS Support
+Presently, TLS support is available only for the MySQL driver.
+
+To enable TLS support, call `sql.loadTLS` from the script, before calling `sql.open`. [mysql_secure_test.js](examples/mysql_secure_test.js) is an example.
+
+`sql.loadTLS` accepts the following options:
+
+```javascript
+sql.loadTLS({
+  enableTLS: true,
+  insecureSkipTLSverify: true,
+  minVersion: sql.TLS_1_2,
+  // Possible values: sql.TLS_1_0, sql.TLS_1_1, sql.TLS_1_2, sql.TLS_1_3
+  caCertFile: '/filepath/to/ca.pem',
+  clientCertFile: '/filepath/to/client-cert.pem',
+  clientKeyFile: '/filepath/to/client-key.pem',
+});
+```
 
 ### Support for other RDBMSs
 

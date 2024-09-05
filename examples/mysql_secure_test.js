@@ -4,7 +4,7 @@ sql.loadTLS({
   enableTLS: true,
   insecureSkipTLSverify: true,
   minVersion: sql.TLS_1_2,  
-  // Possible values: TLS_1_0, TLS_1_1, TLS_1_2, TLS_1_3
+  // Possible values: sql.TLS_1_0, sql.TLS_1_1, sql.TLS_1_2, sql.TLS_1_3
   caCertFile: 'ca.pem',
   clientCertFile: 'client-cert.pem',
   clientKeyFile: 'client-key.pem',

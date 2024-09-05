@@ -7,10 +7,12 @@ import (
 	dbsql "database/sql"
 	"encoding/json"
 	"fmt"
-	"github.com/go-sql-driver/mysql"
-	"github.com/grafana/sobek"
 	"os"
 	"strings"
+
+	"github.com/go-sql-driver/mysql"
+	"github.com/grafana/sobek"
+
 	// Blank imports required for initialization of drivers
 	_ "github.com/ClickHouse/clickhouse-go/v2"
 	_ "github.com/go-sql-driver/mysql"
@@ -24,7 +26,7 @@ import (
 )
 
 // supportedTLSVersions is a map of TLS versions to their numeric values.
-var supportedTLSVersions = map[string]uint16{
+var supportedTLSVersions = map[string]uint16{ //nolint: gochecknoglobals
 	netext.TLS_1_0: tls.VersionTLS10,
 	netext.TLS_1_1: tls.VersionTLS11,
 	netext.TLS_1_2: tls.VersionTLS12,
@@ -116,6 +118,7 @@ func (sql *SQL) defineConstants() {
 	mustAddProp("TLS_1_3", netext.TLS_1_3)
 }
 
+// TLSConfig contains all the TLS configuration options passed between the JS and Go code.
 type TLSConfig struct {
 	EnableTLS             bool   `json:"enableTLS"`
 	InsecureSkipTLSverify bool   `json:"insecureSkipTLSverify"`
@@ -135,6 +138,9 @@ func (sql *SQL) LoadTLS(params map[string]interface{}) {
 		if err := json.Unmarshal(b, &tlsConfig); err != nil {
 			common.Throw(runtime, err)
 		}
+	}
+	if _, ok := supportedTLSVersions[tlsConfig.MinVersion]; !ok {
+		common.Throw(runtime, fmt.Errorf("unsupported TLS version: %s", tlsConfig.MinVersion))
 	}
 	sql.tlsConfig = *tlsConfig
 }
@@ -180,7 +186,7 @@ func prefixConnectionString(connectionString string, tlsConfigKey string) string
 // registerTLS loads the ca-cert and registers the TLS configuration with the MySQL driver.
 func registerTLS(tlsConfigKey string, tlsConfig TLSConfig) error {
 	rootCAs := x509.NewCertPool()
-	pem, err := os.ReadFile(tlsConfig.CAcertFile)
+	pem, err := os.ReadFile(tlsConfig.CAcertFile) //nolint: forbidigo
 	if err != nil {
 		return err
 	}
@@ -199,7 +205,7 @@ func registerTLS(tlsConfigKey string, tlsConfig TLSConfig) error {
 		RootCAs:            rootCAs,
 		Certificates:       clientCerts,
 		MinVersion:         supportedTLSVersions[tlsConfig.MinVersion],
-		InsecureSkipVerify: tlsConfig.InsecureSkipTLSverify,
+		InsecureSkipVerify: tlsConfig.InsecureSkipTLSverify, // #nosec G402
 	}
 	return mysql.RegisterTLSConfig(tlsConfigKey, mysqlTLSConfig)
 }

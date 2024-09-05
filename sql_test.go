@@ -99,7 +99,7 @@ func setupTestEnv(t *testing.T) *sobek.Runtime {
 func TestPrefixConnectionString(t *testing.T) {
 	t.Parallel()
 
-	var testCases = []struct {
+	testCases := []struct {
 		name             string
 		connectionString string
 		want             string
@@ -118,6 +118,11 @@ func TestPrefixConnectionString(t *testing.T) {
 			name:             "WithExistingTLSparam",
 			connectionString: "root:password@tcp(localhost:3306)/mysql?tls=custom",
 			want:             "root:password@tcp(localhost:3306)/mysql?tls=custom",
+		},
+		{
+			name:             "WithExistingTLSparam",
+			connectionString: "root:password@tcp(localhost:3306)/mysql?tls=notcustom",
+			want:             "root:password@tcp(localhost:3306)/mysql?tls=notcustom&tls=custom",
 		},
 	}
 
