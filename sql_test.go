@@ -9,6 +9,7 @@ import (
 
 	"github.com/grafana/sobek"
 	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.k6.io/k6/js/common"
 	"go.k6.io/k6/js/modulestest"
@@ -93,4 +94,44 @@ func setupTestEnv(t *testing.T) *sobek.Runtime {
 	require.NoError(t, rt.Set("sql", m.Exports().Default))
 
 	return rt
+}
+
+func TestPrefixConnectionString(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name             string
+		connectionString string
+		want             string
+	}{
+		{
+			name:             "HappyPath",
+			connectionString: "root:password@tcp(localhost:3306)/mysql",
+			want:             "root:password@tcp(localhost:3306)/mysql?tls=custom",
+		},
+		{
+			name:             "WithExistingParams",
+			connectionString: "root:password@tcp(localhost:3306)/mysql?param=value",
+			want:             "root:password@tcp(localhost:3306)/mysql?param=value&tls=custom",
+		},
+		{
+			name:             "WithExistingTLSparam",
+			connectionString: "root:password@tcp(localhost:3306)/mysql?tls=custom",
+			want:             "root:password@tcp(localhost:3306)/mysql?tls=custom",
+		},
+		{
+			name:             "WithExistingTLSparam",
+			connectionString: "root:password@tcp(localhost:3306)/mysql?tls=notcustom",
+			want:             "root:password@tcp(localhost:3306)/mysql?tls=notcustom&tls=custom",
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			got := prefixConnectionString(tc.connectionString, "custom")
+			assert.Equal(t, tc.want, got)
+		})
+	}
 }
