@@ -1,7 +1,7 @@
-# v1.55.2
-# Please don't remove the first line. It is used in CI to determine the golangci version
+# v1.57.2
+# Please don't remove the first line. It uses in CI to determine the golangci version
 run:
-  deadline: 5m
+  timeout: 5m
 
 issues:
   # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
@@ -15,34 +15,38 @@ issues:
   exclude-use-default: false
 
   exclude-rules:
-    # Exclude duplicate code and function length and complexity checking in test
-    # files (due to common repeats and long functions in test code)
-    - path: _(test|gen)\.go
-      linters:
-        - cyclop
-        - dupl
-        - gocognit
-        - funlen
-        - lll
-    - linters:
-        - staticcheck # Tracked in https://github.com/grafana/xk6-grpc/issues/14
-      text: "The entire proto file grpc/reflection/v1alpha/reflection.proto is marked as deprecated."
-    - linters:
-        - forbidigo
-      text: 'use of `os\.(SyscallError|Signal|Interrupt)` forbidden'
+   # Exclude duplicate code and function length and complexity checking in test
+   # files (due to common repeats and long functions in test code)
+   - path: _(test|gen)\.go
+     linters:
+       - cyclop
+       - dupl
+       - gocognit
+       - funlen
+       - lll
+       - forcetypeassert
+   - path: js\/modules\/k6\/html\/.*\.go
+     text: "exported: exported "
+     linters:
+       - revive
+   - path: js\/modules\/k6\/http\/.*_test\.go
+     linters:
+       # k6/http module's tests are quite complex because they often have several nested levels.
+       # The module is in maintainance mode, so we don't intend to port the tests to a parallel version.
+       - paralleltest
+       - tparallel
+   - linters:
+     - staticcheck # Tracked in https://github.com/grafana/xk6-grpc/issues/14
+     text: "The entire proto file grpc/reflection/v1alpha/reflection.proto is marked as deprecated."
+   - linters:
+     - forbidigo
+     text: 'use of `os\.(SyscallError|Signal|Interrupt)` forbidden'
 
 linters-settings:
-  nolintlint:
-    # Disable to ensure that nolint directives don't have a leading space. Default is true.
-    allow-leading-space: false
   exhaustive:
     default-signifies-exhaustive: true
-  govet:
-    check-shadowing: true
   cyclop:
     max-complexity: 25
-  maligned:
-    suggest-new: true
   dupl:
     threshold: 150
   goconst:
