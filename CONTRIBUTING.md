@@ -39,6 +39,8 @@ eget -t 1.57.2 golangci/golangci-lint
 go install go.k6.io/xk6/cmd/xk6@latest
 ```
 
+[tools]: (#tools---install-the-required-tools)
+
 ### lint - Run the linter
 
 The `golangci-lint` tool is used for static analysis of the source code.
