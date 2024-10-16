@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/grafana/sobek"
 	"go.k6.io/k6/js/modules"
 )
 
@@ -50,8 +51,13 @@ type KeyValue map[string]interface{}
 
 // open establishes a connection to the specified database type using
 // the provided connection string.
-func (mod *module) Open(driverName string, connectionString string) (*sql.DB, error) {
-	registered, database := lookupDriver(driverName)
+func (mod *module) Open(driverID sobek.Value, connectionString string) (*sql.DB, error) {
+	driverSym, ok := driverID.(*sobek.Symbol)
+	if !ok {
+		return nil, fmt.Errorf("%w: invalid driver parameter type", errUnsupportedDatabase)
+	}
+
+	registered, database := lookupDriver(driverSym)
 	if !registered {
 		return nil, fmt.Errorf("%w: %s", errUnsupportedDatabase, database)
 	}

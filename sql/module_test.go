@@ -25,7 +25,7 @@ func TestIntegration(t *testing.T) {
 	rt := setupTestEnv(t)
 
 	_, err := rt.RunString(`
-const db = sql.open("ramsql", "testdb");
+const db = sql.open(driver, "testdb");
 
 db.exec("CREATE TABLE test_table (id integer PRIMARY KEY AUTOINCREMENT, name varchar NOT NULL, value varchar);")
 
@@ -56,8 +56,6 @@ db.close()
 func setupTestEnv(t *testing.T) *sobek.Runtime {
 	t.Helper()
 
-	sql.RegisterDriver("ramsql")
-
 	rt := sobek.New()
 	rt.SetFieldNameMapper(common.FieldNameMapper{})
 
@@ -86,6 +84,18 @@ func setupTestEnv(t *testing.T) *sobek.Runtime {
 	)
 
 	require.NoError(t, rt.Set("sql", m.Exports().Default))
+
+	root = sql.RegisterModule("ramsql")
+	m = root.NewModuleInstance(
+		&modulestest.VU{
+			RuntimeField: rt,
+			InitEnvField: &common.InitEnvironment{},
+			CtxField:     context.Background(),
+			StateField:   state,
+		},
+	)
+
+	require.NoError(t, rt.Set("driver", m.Exports().Default))
 
 	return rt
 }

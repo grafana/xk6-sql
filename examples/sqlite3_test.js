@@ -1,6 +1,7 @@
-import sql from 'k6/x/sql';
+import sql from "k6/x/sql";
+import driver from "k6/x/sql/driver/sqlite3";
 
-const db = sql.open("sqlite3", "./test.db");
+const db = sql.open(driver, "./test.db");
 
 export function setup() {
   db.exec(`CREATE TABLE IF NOT EXISTS keyvalues (
