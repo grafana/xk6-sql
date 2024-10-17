@@ -1,8 +1,9 @@
 import sql from 'k6/x/sql';
+import driver from "k6/x/sql/driver/azuresql";
 
 // The second argument is a MS SQL connection string, e.g.
 // Server=127.0.0.1;Database=myDB;fedauth=ActiveDirectoryDefault;
-const db = sql.open('azuresql', '');
+const db = sql.open(driver, '');
 
 export function setup() {
   db.exec(`IF object_id('keyvalues') is null

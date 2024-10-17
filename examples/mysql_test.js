@@ -1,8 +1,9 @@
 import sql from 'k6/x/sql';
+import driver from "k6/x/sql/driver/mysql";
 
 // The second argument is a MySQL connection string, e.g.
 // myuser:mypass@tcp(127.0.0.1:3306)/mydb
-const db = sql.open('mysql', '');
+const db = sql.open(driver, '');
 
 export function setup() {
   db.exec(`

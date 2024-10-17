@@ -1,8 +1,9 @@
 import sql from 'k6/x/sql';
+import driver from "k6/x/sql/driver/postgres";
 
 // The second argument is a PostgreSQL connection string, e.g.
 // postgres://myuser:mypass@127.0.0.1:5432/postgres?sslmode=disable
-const db = sql.open('postgres', '');
+const db = sql.open(driver, '');
 
 export function setup() {
   db.exec(`CREATE TABLE IF NOT EXISTS keyvalues (

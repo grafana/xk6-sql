@@ -1,6 +1,7 @@
 import sql from 'k6/x/sql';
+import driver from "k6/x/sql/driver/clickhouse";
 
-const db = sql.open("clickhouse", "clickhouse://127.0.0.1:19000");
+const db = sql.open(driver, "clickhouse://127.0.0.1:19000");
 
 export function setup() {
   db.exec(`CREATE TABLE IF NOT EXISTS hits_by_user_url
