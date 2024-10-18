@@ -9,13 +9,13 @@ __help__:
 	@echo ''
 	@echo 'Targets:'
 	@echo '  all      Clean build'
-	@echo '  build    Build a custom k6 with the extension'
-	@echo '  clean    Delete the build directory'
+	@echo '  build    Build custom k6 with extension'
+	@echo '  clean    Clean the working directory'
 	@echo '  coverage View the test coverage report'
-	@echo '  example  Run example'
-	@echo '  format   Applies Go formatting to code'
+	@echo '  example  Run the example'
+	@echo '  format   Format the go source codes'
 	@echo '  lint     Run the linter'
-	@echo '  makefile Generate Makefile'
+	@echo '  makefile Generate the Makefile'
 	@echo '  readme   Update README.md'
 	@echo '  test     Run the tests'
 	@echo '  tools    Install the required tools'
@@ -24,18 +24,17 @@ __help__:
 .PHONY: all
 all: clean format test build
 
-# Build a custom k6 with the extension
+# Build custom k6 with extension
 .PHONY: build
 build: 
 	@(\
-		CGO_ENABLED=1 xk6 build --with github.com/grafana/xk6-sql=. --with github.com/grafana/xk6-sql-driver-ramsql;\
+		xk6 build --with github.com/grafana/xk6-sql=. --with github.com/grafana/xk6-sql-driver-ramsql;\
 	)
 
-# Delete the build directory
+# Clean the working directory
 .PHONY: clean
 clean: 
 	@(\
-		rm -rf build;\
 		rm -f ./k6;\
 	)
 
@@ -46,14 +45,14 @@ coverage: test
 		go tool cover -html=coverage.out;\
 	)
 
-# Run example
+# Run the example
 .PHONY: example
 example: 
 	@(\
 		./k6 run examples/example.js  > examples/example.txt 2>&1;\
 	)
 
-# Applies Go formatting to code
+# Format the go source codes
 .PHONY: format
 format: 
 	@(\
@@ -67,7 +66,7 @@ lint:
 		golangci-lint run;\
 	)
 
-# Generate Makefile
+# Generate the Makefile
 .PHONY: makefile
 makefile: 
 	@(\
@@ -85,7 +84,7 @@ readme:
 .PHONY: test
 test: 
 	@(\
-		go test -count 1 -race -coverprofile=coverage.out ./...;\
+		go test -count 1 -race -coverprofile=coverage.out -timeout 60s ./...;\
 	)
 
 # Install the required tools
