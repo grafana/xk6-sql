@@ -91,7 +91,7 @@ eget -t 1.57.2 golangci/golangci-lint
 go install go.k6.io/xk6/cmd/xk6@latest
 ```
 
-[tools]: (#tools---install-the-required-tools)
+[tools]: #tools---install-the-required-tools
 [xk6]: https://github.com/grafana/xk6
 
 ### lint - Run the linter
@@ -158,7 +158,7 @@ Delete the work files created in the work directory (also included in .gitignore
 rm -f ./k6
 ```
 
-[clean]: (#clean---clean-the-working-directory)
+[clean]: #clean---clean-the-working-directory
 
 ### all - Clean build
 
@@ -173,7 +173,7 @@ Requires
 go fmt ./...
 ```
 
-[format]: (#format---format-the-go-source-codes)
+[format]: #format---format-the-go-source-codes
 
 ### makefile - Generate the Makefile
 
