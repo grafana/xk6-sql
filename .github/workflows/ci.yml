@@ -1,30 +1,24 @@
 name: CI
 
 on:
-  # Enable manually triggering this workflow via the API or web UI
   workflow_dispatch:
   push:
     branches:
       - main
-      - master
     tags:
       - v*
   pull_request:
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
-  build-with-xk6:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: Install Go
-        uses: actions/setup-go@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.21.x
+          go-version: 1.22.x
       - name: Check build
         run: |
           go version
@@ -38,7 +32,7 @@ jobs:
             --with $MODULE_NAME="."
           ./k6ext version
 
-  test-go-versions:
+  test:
     strategy:
       fail-fast: false
       matrix:
@@ -49,7 +43,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Install Go ${{ matrix.go-version }}
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
       - name: Run tests

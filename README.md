@@ -1,79 +1,31 @@
 # xk6-sql
 
-This is a [k6](https://github.com/grafana/k6) extension using the
-[xk6](https://github.com/grafana/xk6) system.
+**Use SQL databases from k6 tests.**
 
-Supported RDBMSs: `mysql`, `postgres`, `sqlite3`, `sqlserver`, `azuresql`, `clickhouse`. See the [examples](examples)
-directory for usage. Other RDBMSs are not supported, see
-[details below](#support-for-other-rdbmss).
+xk6-sql is a [Grafana k6 extension](https://grafana.com/docs/k6/latest/extensions/) that enables the use of SQL databases in [k6](https://grafana.com/docs/k6/latest/) tests.
 
-## Table of Contents
-- [Build](#build)
-- [Development](#development)
-- [Example](#example)
-  - [TLS support](#tls-support)
-  - [Support for other RDBMSs](#support-for-other-rdbmss)
-- [Docker](#docker)
+## Usage
 
-## Build
+To use the xk6-sql API, the `k6/x/sql` module and the driver module corresponding to the database type should be imported. In the example below, `k6/x/sql/driver/ramsql` is the RamSQL database driver module.
 
-To build a `k6` binary with this plugin, first ensure you have the prerequisites:
+The driver module exports a driver ID. This driver identifier should be used to identify the database driver to be used in the API functions.
 
-- [Go toolchain](https://go101.org/article/go-toolchain.html)
-- If you're using SQLite, a build toolchain for your system that includes `gcc` or
-  another C compiler. On Debian and derivatives install the `build-essential`
-  package. On Windows you can use [tdm-gcc](https://jmeubank.github.io/tdm-gcc/).
-  Make sure that `gcc` is in your `PATH`.
-- Git
+**example**
 
-Then:
+```javascript file=examples/example.js
+import sql from "k6/x/sql";
 
-1. Install `xk6`:
-  ```shell
-  go install go.k6.io/xk6/cmd/xk6@latest
-  ```
+// ramsql is hypothetical, the actual driver name should be used instead.
+import driver from "k6/x/sql/driver/ramsql";
 
-2. Build the binary:
-  ```shell
-  xk6 build --with github.com/grafana/xk6-sql
-  ```
-
-  If you're using SQLite, ensure you have a C compiler installed (see the
-  prerequisites note) and set `CGO_ENABLED=1` in the environment:
-  ```shell
-  CGO_ENABLED=1 xk6 build --with github.com/grafana/xk6-sql
-  ```
-
-  On Windows this is done slightly differently:
-  ```shell
-  set CGO_ENABLED=1
-  xk6 build --with github.com/grafana/xk6-sql
-  ```
-
-## Development
-To make development a little smoother, use the `Makefile` in the root folder. The default target will format your code, run tests, and create a `k6` binary with your local code rather than from GitHub.
-
-```bash
-make
-```
-Once built, you can run your newly extended `k6` using:
-```shell
- ./k6 run examples/sqlite3_test.js
- ```
-
-## Example
-
-```javascript
-// script.js
-import sql from 'k6/x/sql';
-
-const db = sql.open("sqlite3", "./test.db");
+const db = sql.open(driver, "test_db");
 
 export function setup() {
-  db.exec(`CREATE TABLE IF NOT EXISTS keyvalues (
-           id integer PRIMARY KEY AUTOINCREMENT,
-           key varchar NOT NULL,
-           value varchar);`);
+  db.exec(`CREATE TABLE IF NOT EXISTS namevalue (
+             id INTEGER PRIMARY KEY AUTOINCREMENT,
+             name VARCHAR NOT NULL,
+             value VARCHAR
+           );`);
 }
 
 export function teardown() {
@@ -81,104 +33,83 @@ export function teardown() {
 }
 
 export default function () {
-  db.exec("INSERT INTO keyvalues (key, value) VALUES('plugin-name', 'k6-plugin-sql');");
+  db.exec("INSERT INTO namevalue (name, value) VALUES('extension-name', 'xk6-foo');");
 
-  let results = sql.query(db, "SELECT * FROM keyvalues;");
+  let results = sql.query(db, "SELECT * FROM namevalue WHERE name = $1;", "extension-name");
   for (const row of results) {
-    console.log(`key: ${row.key}, value: ${row.value}`);
+    console.log(`name: ${row.name}, value: ${row.value}`);
   }
 }
 ```
 
-Result output:
+<details>
+<summary><b>output</b></summary>
 
-```shell
-$ ./k6 run script.js
+```bash file=examples/example.txt
 
-          /\      |‾‾| /‾‾/   /‾‾/
-     /\  /  \     |  |/  /   /  /
-    /  \/    \    |     (   /   ‾‾\
-   /          \   |  |\  \ |  (‾)  |
-  / __________ \  |__| \__\ \_____/ .io
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
 
-  execution: local
-     script: /tmp/script.js
-     output: -
+     execution: local
+        script: examples/example.js
+        output: -
 
-  scenarios: (100.00%) 1 scenario, 1 max VUs, 10m30s max duration (incl. graceful stop):
-           * default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)
+     scenarios: (100.00%) 1 scenario, 1 max VUs, 10m30s max duration (incl. graceful stop):
+              * default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)
 
-INFO[0000] key: plugin-name, value: k6-plugin-sql        source=console
+time="2024-10-18T09:06:52+02:00" level=info msg="name: extension-name, value: xk6-foo" source=console
 
-running (00m00.1s), 0/1 VUs, 1 complete and 0 interrupted iterations
-default ✓ [======================================] 1 VUs  00m00.0s/10m0s  1/1 iters, 1 per VU
+     data_received........: 0 B 0 B/s
+     data_sent............: 0 B 0 B/s
+     iteration_duration...: avg=496.46µs min=496.46µs med=496.46µs max=496.46µs p(90)=496.46µs p(95)=496.46µs
+     iterations...........: 1   550.030197/s
 
-    █ setup
 
-    █ teardown
-
-    data_received........: 0 B 0 B/s
-    data_sent............: 0 B 0 B/s
-    iteration_duration...: avg=9.22ms min=19.39µs med=8.86ms max=18.8ms p(90)=16.81ms p(95)=17.8ms
-    iterations...........: 1   15.292228/s
+running (00m00.0s), 0/1 VUs, 1 complete and 0 interrupted iterations
+default ✓ [ 100% ] 1 VUs  00m00.0s/10m0s  1/1 iters, 1 per VU
 ```
 
-#### See also
+</details>
 
-- [Load Testing SQL Databases with k6](https://k6.io/blog/load-testing-sql-databases-with-k6/)
+## Build
 
-### TLS Support
-Presently, TLS support is available only for the MySQL driver.
+The [xk6](https://github.com/grafana/xk6) build tool can be used to build a k6 that will include **xk6-sql** extension and database drivers.
 
-To enable TLS support, call `sql.loadTLS` from the script, before calling `sql.open`. [mysql_secure_test.js](examples/mysql_secure_test.js) is an example.
+> [!IMPORTANT]
+> In the command line bellow, **xk6-sql-driver-ramsql** is just an example, it should be replaced with the database driver extension you want to use.
+> For example use `--with github.com/grafana/xk6-sql-driver-mysql` to access MySQL databases.
 
-`sql.loadTLS` accepts the following options:
-
-```javascript
-sql.loadTLS({
-  enableTLS: true,
-  insecureSkipTLSverify: true,
-  minVersion: sql.TLS_1_2,
-  // Possible values: sql.TLS_1_0, sql.TLS_1_1, sql.TLS_1_2, sql.TLS_1_3
-  caCertFile: '/filepath/to/ca.pem',
-  clientCertFile: '/filepath/to/client-cert.pem',
-  clientKeyFile: '/filepath/to/client-key.pem',
-});
+```bash
+xk6 build --with github.com/grafana/xk6-sql@latest --with github.com/grafana/xk6-sql-driver-ramsql
 ```
 
-### Support for other RDBMSs
+For more build options and how to use xk6, check out the [xk6 documentation](https://github.com/grafana/xk6).
 
-Note that this project is not accepting support for additional SQL implementations
-and RDBMSs. See the discussion in [issue #17](https://github.com/grafana/xk6-sql/issues/17)
-for the reasoning.
+Supported RDBMSs includes: `mysql`, `postgres`, `sqlite3`, `sqlserver`, `azuresql`, `clickhouse`.
 
-There are however forks of this project that add additional support for:
-- [Oracle](https://github.com/stefnedelchevbrady/xk6-sql-with-oracle)
-- [Snowflake](https://github.com/libertymutual/xk6-sql)
+Check the [xk6-sql-driver GitHub topic](https://github.com/topics/xk6-sql-driver) to discover database driver extensions.
 
-You can build k6 binaries by simply specifying these project URLs in `xk6 build`.
-E.g. `CGO_ENABLED=1 xk6 build --with github.com/stefnedelchevbrady/xk6-sql-with-oracle`.
-Please report any issues with these extensions in their respective GitHub issue trackers,
-and not in grafana/xk6-sql.
+## Drivers
 
+To use the xk6-sql extension, one or more database driver extensions should also be embedded. Database driver extension names typically start with the prefix `xk6-sql-driver-` followed by the name of the database, for example `xk6-sql-driver-mysql` is the name of the MySQL database driver extension.
 
-## Docker
+For easier discovery, the `xk6-sql-driver` topic is included in the database driver extensions repository. The [xk6-sql-driver GitHub topic search](https://github.com/topics/xk6-sql-driver) therefore lists the available driver extensions.
 
-For those who do not have a Go development environment available, or simply want
-to run an extended version of `k6` as a container, Docker is an option to build
-and run the application.
+### Create driver
 
-The following command will build a custom `k6` image incorporating the `xk6-sql` extension
-built from the local source files.
-```shell
-docker build -t grafana/k6-for-sql:latest .
-```
-Using this image, you may then execute the [examples/sqlite3_test.js](examples/sqlite3_test.js) script
-by running the following command:
-```shell
-docker run -v $PWD:/scripts -it --rm grafana/k6-for-sql:latest run /scripts/examples/sqlite3_test.js
-```
-For those on Mac or Linux, the `docker-run.sh` script simplifies the command:
-```shell
-./docker-run.sh examples/sqlite3_test.js
-```
+Check the [grafana/xk6-sql-driver-ramsql](https://github.com/grafana/xk6-sql-driver-ramsql) template repository to create a new driver extension. This is a working driver extension with instructions in its README for customization.
+
+[Postgres driver extension](https://github.com/grafana/xk6-sql-driver-postgres) and [MySQL driver extension](https://github.com/grafana/xk6-sql-driver-mysql) are also good examples.
+
+## Feedback
+
+If you find the **xk6-sql** extension useful, please star the repo. The number of stars will affect the time allocated for maintenance.
+
+[![Stargazers over time](https://starchart.cc/grafana/xk6-sql.svg?variant=adaptive)](https://starchart.cc/grafana/xk6-sql)
+
+## Contribute
+
+If you want to contribute or help with the development of **xk6-sql**, start by reading [CONTRIBUTING.md](CONTRIBUTING.md). 
