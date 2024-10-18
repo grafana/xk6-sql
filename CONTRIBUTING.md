@@ -93,11 +93,12 @@ go install go.k6.io/xk6/cmd/xk6@latest
 
 [tools]: #tools---install-the-required-tools
 [xk6]: https://github.com/grafana/xk6
+[mdcode]: https://github.com/szkiba/mdcode
+[golangci-lint]: https://github.com/golangci/golangci-lint
 
 ### lint - Run the linter
 
-The `golangci-lint` tool is used for static analysis of the source code.
-It is advisable to run it before committing the changes.
+The [golangci-lint] tool is used for static analysis of the source code. It is advisable to run it before committing the changes.
 
 ```bash
 golangci-lint run
@@ -144,7 +145,7 @@ Run the example embedded in `README.md` and save the output.
 
 ### readme - Update README.md
 
-Update the example code and its output in `README.md`.
+Update the example code and its output in `README.md` using [mdcode] tool.
 
 ```bash
 mdcode update
