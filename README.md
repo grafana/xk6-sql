@@ -98,6 +98,12 @@ To use the xk6-sql extension, one or more database driver extensions should also
 
 For easier discovery, the `xk6-sql-driver` topic is included in the database driver extensions repository. The [xk6-sql-driver GitHub topic search](https://github.com/topics/xk6-sql-driver) therefore lists the available driver extensions.
 
+### Create driver
+
+Check the [grafana/xk6-sql-driver-ramsql](https://github.com/grafana/xk6-sql-driver-ramsql) template repository to create a new driver extension. This is a working driver extension with instructions in its README for customization.
+
+[Postgres driver extension](https://github.com/grafana/xk6-sql-driver-postgres) and [MySQL driver extension](https://github.com/grafana/xk6-sql-driver-mysql) are also good examples.
+
 ## Feedback
 
 If you find the **xk6-sql** extension useful, please star the repo. The number of stars will affect the time allocated for maintenance.
