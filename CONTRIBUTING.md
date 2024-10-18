@@ -1,4 +1,4 @@
-# How to contribute to xk6-sql
+# Contributing Guidelines
 
 Thank you for your interest in contributing to **xk6-sql**!
 
@@ -70,17 +70,22 @@ go tool cover -html=coverage.out
 ### build - Build a custom k6 with the extension
 
 ```bash
-CGO_ENABLED=1 xk6 build --with github.com/grafana/xk6-sql=.
+CGO_ENABLED=1 xk6 build --with github.com/grafana/xk6-sql=. --with github.com/grafana/xk6-sql-driver-ramsql
 ```
 
 [build]: <#build---build-a-custom-k6-with-the-extension>
+
+### example - Run example
+
+```bash
+./k6 run examples/example.js  > examples/example.txt 2>&1
+```
 
 ### clean - Delete the build directory
 
 ```bash
 rm -rf build
 rm -f ./k6
-rm -f ./intg_test.db
 ```
 
 ### format - Applies Go formatting to code
@@ -98,4 +103,10 @@ Requires
 
 ```bash
 cdo --makefile Makefile
+```
+
+### readme - Update README.md
+
+```bash
+mdcode update
 ```

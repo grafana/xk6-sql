@@ -12,9 +12,11 @@ __help__:
 	@echo '  build    Build a custom k6 with the extension'
 	@echo '  clean    Delete the build directory'
 	@echo '  coverage View the test coverage report'
+	@echo '  example  Run example'
 	@echo '  format   Applies Go formatting to code'
 	@echo '  lint     Run the linter'
 	@echo '  makefile Generate Makefile'
+	@echo '  readme   Update README.md'
 	@echo '  test     Run the tests'
 	@echo '  tools    Install the required tools'
 
@@ -26,7 +28,7 @@ all: clean format test build
 .PHONY: build
 build: 
 	@(\
-		CGO_ENABLED=1 xk6 build --with $$(go list -m)=.;\
+		CGO_ENABLED=1 xk6 build --with github.com/grafana/xk6-sql=. --with github.com/grafana/xk6-sql-driver-ramsql;\
 	)
 
 # Delete the build directory
@@ -35,7 +37,6 @@ clean:
 	@(\
 		rm -rf build;\
 		rm -f ./k6;\
-		rm -f ./intg_test.db;\
 	)
 
 # View the test coverage report
@@ -43,6 +44,13 @@ clean:
 coverage: test
 	@(\
 		go tool cover -html=coverage.out;\
+	)
+
+# Run example
+.PHONY: example
+example: 
+	@(\
+		./k6 run examples/example.js  > examples/example.txt 2>&1;\
 	)
 
 # Applies Go formatting to code
@@ -64,6 +72,13 @@ lint:
 makefile: 
 	@(\
 		cdo --makefile Makefile;\
+	)
+
+# Update README.md
+.PHONY: readme
+readme: 
+	@(\
+		mdcode update;\
 	)
 
 # Run the tests
