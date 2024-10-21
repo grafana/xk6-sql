@@ -10,7 +10,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  coverage:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: 1.22.x
-      - name: Check build
+      - name: Build
         run: |
           go version
           pwd && ls -l
@@ -31,6 +31,21 @@ jobs:
             --output ./k6ext \
             --with $MODULE_NAME="."
           ./k6ext version
+
+      - name: Test
+        if: ${{ github.ref_name == 'main' }}
+        run: go test -count 1 -coverprofile=coverage.txt ./...
+
+      - name: Upload Coverage
+        if: ${{ github.ref_name == 'main' }}
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: grafana/xk6-sql
+
+      - name: Generate Go Report Card
+        if: ${{ github.ref_name == 'main' }}
+        uses: creekorful/goreportcard-action@v1.0
 
   test:
     strategy:
@@ -51,18 +66,3 @@ jobs:
           which go
           go version
           go test -race -timeout 60s ./...
-
-      - name: Coverage Test
-        if: ${{ matrix.platform == 'ubuntu-latest' && github.ref_name == 'main' }}
-        run: go test -count 1 -coverprofile=coverage.txt ./...
-
-      - name: Upload Coverage
-        if: ${{ matrix.platform == 'ubuntu-latest' && github.ref_name == 'main' }}
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: grafana/xk6-sql
-
-      - name: Generate Go Report Card
-        if: ${{ matrix.platform == 'ubuntu-latest' && github.ref_name == 'main' }}
-        uses: creekorful/goreportcard-action@v1.0
