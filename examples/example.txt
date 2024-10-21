@@ -12,12 +12,13 @@
      scenarios: (100.00%) 1 scenario, 1 max VUs, 10m30s max duration (incl. graceful stop):
               * default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)
 
-time="2024-10-18T09:06:52+02:00" level=info msg="name: extension-name, value: xk6-foo" source=console
+time="2024-10-21T14:54:42+02:00" level=info msg="4 rows inserted" source=console
+time="2024-10-21T14:54:42+02:00" level=info msg="Pan, Peter" source=console
 
      data_received........: 0 B 0 B/s
      data_sent............: 0 B 0 B/s
-     iteration_duration...: avg=496.46µs min=496.46µs med=496.46µs max=496.46µs p(90)=496.46µs p(95)=496.46µs
-     iterations...........: 1   550.030197/s
+     iteration_duration...: avg=344.4µs min=344.4µs med=344.4µs max=344.4µs p(90)=344.4µs p(95)=344.4µs
+     iterations...........: 1   1076.071821/s
 
 
 running (00m00.0s), 0/1 VUs, 1 complete and 0 interrupted iterations
