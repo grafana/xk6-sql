@@ -3,7 +3,6 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/grafana/xk6-sql)](https://goreportcard.com/report/github.com/grafana/xk6-sql)
 [![GitHub Actions](https://github.com/grafana/xk6-sql/actions/workflows/ci.yml/badge.svg)](https://github.com/grafana/xk6-sql/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/grafana/xk6-sql/graph/badge.svg?token=DSkK7glKPq)](https://codecov.io/gh/grafana/xk6-sql)
-![GitHub Downloads](https://img.shields.io/github/downloads/grafana/xk6-sql/total)
 
 # xk6-sql
 
