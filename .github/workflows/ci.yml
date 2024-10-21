@@ -51,3 +51,18 @@ jobs:
           which go
           go version
           go test -race -timeout 60s ./...
+
+      - name: Coverage Test
+        if: ${{ matrix.platform == 'ubuntu-latest' && github.ref_name == 'main' }}
+        run: go test -count 1 -coverprofile=coverage.txt ./...
+
+      - name: Upload Coverage
+        if: ${{ matrix.platform == 'ubuntu-latest' && github.ref_name == 'main' }}
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: grafana/xk6-sql
+
+      - name: Generate Go Report Card
+        if: ${{ matrix.platform == 'ubuntu-latest' && github.ref_name == 'main' }}
+        uses: creekorful/goreportcard-action@v1.0
