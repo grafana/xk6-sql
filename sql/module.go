@@ -29,8 +29,7 @@ func (*rootModule) NewModuleInstance(_ modules.VU) modules.Instance {
 
 	instance.exports.Default = instance
 	instance.exports.Named = map[string]interface{}{
-		"open":  instance.Open,
-		"query": instance.Query,
+		"open": instance.Open,
 	}
 
 	return instance
@@ -51,7 +50,7 @@ type KeyValue map[string]interface{}
 
 // open establishes a connection to the specified database type using
 // the provided connection string.
-func (mod *module) Open(driverID sobek.Value, connectionString string) (*sql.DB, error) {
+func (mod *module) Open(driverID sobek.Value, connectionString string) (*Database, error) {
 	driverSym, ok := driverID.(*sobek.Symbol)
 	if !ok {
 		return nil, fmt.Errorf("%w: invalid driver parameter type", errUnsupportedDatabase)
@@ -67,13 +66,17 @@ func (mod *module) Open(driverID sobek.Value, connectionString string) (*sql.DB,
 		return nil, err
 	}
 
-	return db, nil
+	return &Database{db: db}, nil
 }
 
-// query executes the provided query string against the database, while
-// providing results as a slice of KeyValue instance(s) if available.
-func (*module) Query(db *sql.DB, query string, args ...interface{}) ([]KeyValue, error) {
-	rows, err := db.Query(query, args...)
+// Database is a database handle representing a pool of zero or more underlying connections.
+type Database struct {
+	db *sql.DB
+}
+
+// Query executes a query that returns rows, typically a SELECT.
+func (dbase *Database) Query(query string, args ...interface{}) ([]KeyValue, error) {
+	rows, err := dbase.db.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,6 +115,16 @@ func (*module) Query(db *sql.DB, query string, args ...interface{}) ([]KeyValue,
 	}
 
 	return result, nil
+}
+
+// Exec a query without returning any rows.
+func (dbase *Database) Exec(query string, args ...interface{}) (sql.Result, error) {
+	return dbase.db.Exec(query, args...)
+}
+
+// Close the database and prevents new queries from starting.
+func (dbase *Database) Close() error {
+	return dbase.db.Close()
 }
 
 var errUnsupportedDatabase = errors.New("unsupported database")

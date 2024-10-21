@@ -1,7 +1,7 @@
 [![API Reference](https://img.shields.io/badge/API-reference-blue?logo=readme&logoColor=lightgray)](https://sql.x.k6.io)
 [![GitHub Release](https://img.shields.io/github/v/release/grafana/xk6-sql)](https://github.com/grafana/xk6-sql/releases/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/grafana/xk6-sql)](https://goreportcard.com/report/github.com/grafana/xk6-sql)
-[![GitHub Actions](https://github.com/grafana/xk6-sql/actions/workflows/ci.yml/badge.svg)](https://github.com/grafana/xk6-sql/actions/workflows/ci.yml)
+[![GitHub Actions](https://github.com/grafana/xk6-sql/actions/workflows/test.yml/badge.svg)](https://github.com/grafana/xk6-sql/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/grafana/xk6-sql/graph/badge.svg?token=DSkK7glKPq)](https://codecov.io/gh/grafana/xk6-sql)
 
 # xk6-sql
@@ -53,7 +53,7 @@ export default function () {
   `);
   console.log(`${result.rowsAffected()} rows inserted`);
 
-  let rows = sql.query(db, "SELECT * FROM roster WHERE given_name = $1;", "Peter");
+  let rows = db.query("SELECT * FROM roster WHERE given_name = $1;", "Peter");
   for (const row of rows) {
     console.log(`${row.family_name}, ${row.given_name}`);
   }
@@ -78,13 +78,13 @@ export default function () {
      scenarios: (100.00%) 1 scenario, 1 max VUs, 10m30s max duration (incl. graceful stop):
               * default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)
 
-time="2024-10-21T14:38:58+02:00" level=info msg="4 rows inserted" source=console
-time="2024-10-21T14:38:58+02:00" level=info msg="Pan, Peter" source=console
+time="2024-10-21T15:47:50+02:00" level=info msg="4 rows inserted" source=console
+time="2024-10-21T15:47:50+02:00" level=info msg="Pan, Peter" source=console
 
      data_received........: 0 B 0 B/s
      data_sent............: 0 B 0 B/s
-     iteration_duration...: avg=573.77µs min=573.77µs med=573.77µs max=573.77µs p(90)=573.77µs p(95)=573.77µs
-     iterations...........: 1   967.948327/s
+     iteration_duration...: avg=371.25µs min=371.25µs med=371.25µs max=371.25µs p(90)=371.25µs p(95)=371.25µs
+     iterations...........: 1   1061.969082/s
 
 
 running (00m00.0s), 0/1 VUs, 1 complete and 0 interrupted iterations

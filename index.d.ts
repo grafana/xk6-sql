@@ -40,7 +40,7 @@
  *    `);
  *    console.log(`${result.rowsAffected()} rows inserted`);
  *
- *    let rows = sql.query(db, "SELECT * FROM roster WHERE given_name = $1;", "Peter");
+ *    let rows = db.query("SELECT * FROM roster WHERE given_name = $1;", "Peter");
  *    for (const row of rows) {
  *      console.log(`${row.family_name}, ${row.given_name}`);
  *    }
@@ -159,7 +159,7 @@ export interface Database {
    *  const db = sql.open(driver, "roster_db");
    *
    *  export default function () {
-   *    let rows = sql.query(db, "SELECT * FROM roster WHERE given_name = $1;", "Peter");
+   *    let rows = db.query("SELECT * FROM roster WHERE given_name = $1;", "Peter");
    *    for (const row of results) {
    *      console.log(`${row.family_name}, ${row.given_name}`);
    *    }
@@ -189,7 +189,7 @@ export interface Row {
    *  const db = sql.open(driver, "roster_db");
    *
    *  export default function () {
-   *    let rows = sql.query(db, "SELECT * FROM roster WHERE given_name = $1;", "Peter");
+   *    let rows = db.query("SELECT * FROM roster WHERE given_name = $1;", "Peter");
    *    for (const row of results) {
    *      console.log(`${row.family_name}, ${row.given_name}`);
    *    }
