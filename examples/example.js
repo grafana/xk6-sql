@@ -32,7 +32,7 @@ export default function () {
   `);
   console.log(`${result.rowsAffected()} rows inserted`);
 
-  let rows = sql.query(db, "SELECT * FROM roster WHERE given_name = $1;", "Peter");
+  let rows = db.query("SELECT * FROM roster WHERE given_name = $1;", "Peter");
   for (const row of rows) {
     console.log(`${row.family_name}, ${row.given_name}`);
   }
