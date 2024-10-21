@@ -1,3 +1,10 @@
+[![API Reference](https://img.shields.io/badge/API-reference-blue?logo=readme&logoColor=lightgray)](https://sql.x.k6.io)
+[![GitHub Release](https://img.shields.io/github/v/release/grafana/xk6-sql)](https://github.com/grafana/xk6-sql/releases/)
+[![Go Report Card](https://goreportcard.com/badge/github.com/grafana/xk6-sql)](https://goreportcard.com/report/github.com/grafana/xk6-sql)
+[![GitHub Actions](https://github.com/grafana/xk6-sql/actions/workflows/ci.yml/badge.svg)](https://github.com/grafana/xk6-sql/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/grafana/xk6-sql/graph/badge.svg?token=DSkK7glKPq)](https://codecov.io/gh/grafana/xk6-sql)
+![GitHub Downloads](https://img.shields.io/github/downloads/grafana/xk6-sql/total)
+
 # xk6-sql
 
 **Use SQL databases from k6 tests.**
@@ -15,17 +22,20 @@ The driver module exports a driver ID. This driver identifier should be used to 
 ```javascript file=examples/example.js
 import sql from "k6/x/sql";
 
-// ramsql is hypothetical, the actual driver name should be used instead.
+// the actual database driver should be used instead of ramsql
 import driver from "k6/x/sql/driver/ramsql";
 
-const db = sql.open(driver, "test_db");
+const db = sql.open(driver, "roster_db");
 
 export function setup() {
-  db.exec(`CREATE TABLE IF NOT EXISTS namevalue (
-             id INTEGER PRIMARY KEY AUTOINCREMENT,
-             name VARCHAR NOT NULL,
-             value VARCHAR
-           );`);
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS roster
+      (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        given_name VARCHAR NOT NULL,
+        family_name VARCHAR NOT NULL
+      );
+  `);
 }
 
 export function teardown() {
@@ -33,11 +43,20 @@ export function teardown() {
 }
 
 export default function () {
-  db.exec("INSERT INTO namevalue (name, value) VALUES('extension-name', 'xk6-foo');");
+  let result = db.exec(`
+    INSERT INTO roster
+      (given_name, family_name)
+    VALUES
+      ('Peter', 'Pan'),
+      ('Wendy', 'Darling'),
+      ('Tinker', 'Bell'),
+      ('James', 'Hook');
+  `);
+  console.log(`${result.rowsAffected()} rows inserted`);
 
-  let results = sql.query(db, "SELECT * FROM namevalue WHERE name = $1;", "extension-name");
-  for (const row of results) {
-    console.log(`name: ${row.name}, value: ${row.value}`);
+  let rows = sql.query(db, "SELECT * FROM roster WHERE given_name = $1;", "Peter");
+  for (const row of rows) {
+    console.log(`${row.family_name}, ${row.given_name}`);
   }
 }
 ```
@@ -60,12 +79,13 @@ export default function () {
      scenarios: (100.00%) 1 scenario, 1 max VUs, 10m30s max duration (incl. graceful stop):
               * default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)
 
-time="2024-10-18T09:06:52+02:00" level=info msg="name: extension-name, value: xk6-foo" source=console
+time="2024-10-21T14:38:58+02:00" level=info msg="4 rows inserted" source=console
+time="2024-10-21T14:38:58+02:00" level=info msg="Pan, Peter" source=console
 
      data_received........: 0 B 0 B/s
      data_sent............: 0 B 0 B/s
-     iteration_duration...: avg=496.46µs min=496.46µs med=496.46µs max=496.46µs p(90)=496.46µs p(95)=496.46µs
-     iterations...........: 1   550.030197/s
+     iteration_duration...: avg=573.77µs min=573.77µs med=573.77µs max=573.77µs p(90)=573.77µs p(95)=573.77µs
+     iterations...........: 1   967.948327/s
 
 
 running (00m00.0s), 0/1 VUs, 1 complete and 0 interrupted iterations

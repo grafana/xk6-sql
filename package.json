@@ -1,0 +1,15 @@
+{
+  "name": "xk6-sql",
+  "version": "1.0.0",
+  "description": "Use SQL databases from k6 tests",
+  "repository": "github:grafana/xk6-sql",
+  "license": "AGPL-3.0-only",
+  "devDependencies": {
+    "@types/k6": "^0.54.0",
+    "k6": "^0.0.0"
+  },
+  "files": [
+    "index.d.ts"
+  ],
+  "types": "index.d.ts"
+}
