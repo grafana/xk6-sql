@@ -4,6 +4,14 @@
  * xk6-sql is a [Grafana k6 extension](https://grafana.com/docs/k6/latest/extensions/) that enables
  * the use of SQL databases in [k6](https://grafana.com/docs/k6/latest/) tests.
  *
+ * In order to use the `xk6-sql` API, in addition to the `k6/x/sql` module,
+ * it is also necessary to import at least one driver module.
+ * The default export of the driver module is a driver identifier symbol,
+ * which should be passed as a parameter of the `open()` function.
+ *
+ * The driver module is typically available at `k6/x/sql/driver/FOO`,
+ * where `FOO` is the name of the driver.
+ *
  * @example
  *  ```ts file=examples/example.js
  *  import sql from "k6/x/sql";
