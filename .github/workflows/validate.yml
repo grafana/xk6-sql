@@ -1,0 +1,13 @@
+name: Validate
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  validate:
+    name: Validate
+    uses: grafana/k6-extension-workflows/.github/workflows/validate.yml@v0.1.0
