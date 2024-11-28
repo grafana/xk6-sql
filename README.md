@@ -1,7 +1,7 @@
 [![API Reference](https://img.shields.io/badge/API-reference-blue?logo=readme&logoColor=lightgray)](https://sql.x.k6.io)
 [![GitHub Release](https://img.shields.io/github/v/release/grafana/xk6-sql)](https://github.com/grafana/xk6-sql/releases/latest)
 [![Go Report Card](https://goreportcard.com/badge/github.com/grafana/xk6-sql)](https://goreportcard.com/report/github.com/grafana/xk6-sql)
-[![GitHub Actions](https://github.com/grafana/xk6-sql/actions/workflows/test.yml/badge.svg)](https://github.com/grafana/xk6-sql/actions/workflows/test.yml)
+[![GitHub Actions](https://github.com/grafana/xk6-sql/actions/workflows/validate.yml/badge.svg)](https://github.com/grafana/xk6-sql/actions/workflows/validate.yml)
 [![codecov](https://codecov.io/gh/grafana/xk6-sql/graph/badge.svg?token=DSkK7glKPq)](https://codecov.io/gh/grafana/xk6-sql)
 
 # xk6-sql
