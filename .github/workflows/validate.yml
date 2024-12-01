@@ -10,4 +10,4 @@ on:
 jobs:
   validate:
     name: Validate
-    uses: grafana/k6-extension-workflows/.github/workflows/validate.yml@v0.1.0
+    uses: grafana/k6-extension-workflows/.github/workflows/validate.yml@v0.2.0
