@@ -6,7 +6,6 @@ import (
 
 	"github.com/grafana/xk6-sql/sql"
 	"github.com/grafana/xk6-sql/sqltest"
-
 	_ "github.com/proullon/ramsql/driver"
 )
 

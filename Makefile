@@ -12,17 +12,17 @@ __help__:
 	@echo '  build    Build custom k6 with extension'
 	@echo '  clean    Clean the working directory'
 	@echo '  coverage View the test coverage report'
-	@echo '  example  Run the example'
+	@echo '  doc      Generate API documentation'
+	@echo '  example  Run the examples'
 	@echo '  format   Format the go source codes'
 	@echo '  lint     Run the linter'
 	@echo '  makefile Generate the Makefile'
 	@echo '  readme   Update README.md'
 	@echo '  test     Run the tests'
-	@echo '  tools    Install the required tools'
 
 # Clean build
 .PHONY: all
-all: clean format test build
+all: clean format test build doc
 
 # Build custom k6 with extension
 .PHONY: build
@@ -35,21 +35,28 @@ build:
 .PHONY: clean
 clean: 
 	@(\
-		rm -f ./k6;\
+		rm -rf ./k6 ./coverage.txt ./build ./node_modules ./bun.lockb;\
 	)
 
 # View the test coverage report
 .PHONY: coverage
 coverage: test
 	@(\
-		go tool cover -html=coverage.out;\
+		go tool cover -html=coverage.txt;\
 	)
 
-# Run the example
+# Generate API documentation
+.PHONY: doc
+doc: 
+	@(\
+		bun x typedoc --out build/docs;\
+	)
+
+# Run the examples
 .PHONY: example
 example: 
 	@(\
-		./k6 run examples/example.js  > examples/example.txt 2>&1;\
+		bats ./examples;\
 	)
 
 # Format the go source codes
@@ -84,15 +91,6 @@ readme:
 .PHONY: test
 test: 
 	@(\
-		go test -count 1 -race -coverprofile=coverage.out -timeout 60s ./...;\
-	)
-
-# Install the required tools
-.PHONY: tools
-tools: 
-	@(\
-		eget szkiba/mdcode;\
-		eget -t 1.57.2 golangci/golangci-lint;\
-		go install go.k6.io/xk6/cmd/xk6@latest;\
+		go test -count 1 -race -coverprofile=coverage.txt -timeout 60s ./...;\
 	)
 
