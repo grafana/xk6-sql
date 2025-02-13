@@ -10,6 +10,24 @@
 
 xk6-sql is a [Grafana k6 extension](https://grafana.com/docs/k6/latest/extensions/) that enables the use of SQL databases in [k6](https://grafana.com/docs/k6/latest/) tests.
 
+Check out the API documentation [here](https://sql.x.k6.io). The TypeScript declaration file can be downloaded from [here](https://sql.x.k6.io/index.d.ts).
+
+> [!NOTE]
+> To use the TypeScript declaration file in your IDE (e.g. Visual Studio Code), you need to create a `jsconfig.json` (or `tsconfig.json`) file with the following content:
+>
+> ```json file=examples/jsconfig.json
+> {
+>  "compilerOptions": {
+>    "target": "ES6",
+>    "module": "ES6",
+>    "paths": {
+>      "k6/x/sql": ["./typings/xk6-sql/index.d.ts"]
+>    }
+>  }
+>}
+>```
+> You will need to update the TypeScript declaration file location in the example above to where you downloaded it.
+
 ## Usage
 
 To use the xk6-sql API, the `k6/x/sql` module and the driver module corresponding to the database type should be imported. In the example below, `k6/x/sql/driver/ramsql` is the RamSQL database driver module.
