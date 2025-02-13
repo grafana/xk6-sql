@@ -8,7 +8,9 @@ import (
 )
 
 func TestOpen(t *testing.T) { //nolint: paralleltest
-	mod := New().NewModuleInstance(nil).(*module)
+	mod, ok := New().NewModuleInstance(nil).(*module)
+
+	require.True(t, ok)
 
 	driver := RegisterDriver("ramsql")
 	require.NotNil(t, driver)

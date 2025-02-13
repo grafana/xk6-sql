@@ -84,6 +84,7 @@ func (dbase *Database) Query(query string, args ...interface{}) ([]KeyValue, err
 	defer func() {
 		_ = rows.Close()
 	}()
+
 	if rows.Err() != nil {
 		return nil, rows.Err()
 	}
@@ -111,6 +112,7 @@ func (dbase *Database) Query(query string, args ...interface{}) ([]KeyValue, err
 		for i, colName := range cols {
 			data[colName] = *valuePtrs[i].(*interface{}) //nolint:forcetypeassert
 		}
+
 		result = append(result, data)
 	}
 

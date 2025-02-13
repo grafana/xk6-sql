@@ -1,6 +1,6 @@
 /k6
 /k6.exe
-/coverage.out
+/coverage.txt
 /build
 /node_modules
 yarn.lock
