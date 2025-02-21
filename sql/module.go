@@ -48,10 +48,37 @@ func (mod *module) Exports() modules.Exports {
 // KeyValue is a simple key-value pair.
 type KeyValue map[string]interface{}
 
+func asSymbol(value sobek.Value) (*sobek.Symbol, bool) {
+	sym, ok := value.(*sobek.Symbol)
+	if ok {
+		return sym, ok
+	}
+
+	obj, ok := value.(*sobek.Object)
+	if !ok {
+		return nil, false
+	}
+
+	valueOf, ok := sobek.AssertFunction(obj.Get("valueOf"))
+	if !ok {
+		return nil, false
+	}
+
+	ret, err := valueOf(obj)
+	if err != nil {
+		return nil, false
+	}
+
+	sym, ok = ret.(*sobek.Symbol)
+
+	return sym, ok
+}
+
 // open establishes a connection to the specified database type using
 // the provided connection string.
 func (mod *module) Open(driverID sobek.Value, connectionString string) (*Database, error) {
-	driverSym, ok := driverID.(*sobek.Symbol)
+	driverSym, ok := asSymbol(driverID)
+
 	if !ok {
 		return nil, fmt.Errorf("%w: invalid driver parameter type", errUnsupportedDatabase)
 	}
