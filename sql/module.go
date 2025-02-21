@@ -76,7 +76,7 @@ func asSymbol(value sobek.Value) (*sobek.Symbol, bool) {
 
 // open establishes a connection to the specified database type using
 // the provided connection string.
-func (mod *module) Open(driverID sobek.Value, connectionString string) (*Database, error) {
+func (mod *module) Open(driverID sobek.Value, connectionString string, opts *options) (*Database, error) {
 	driverSym, ok := asSymbol(driverID)
 
 	if !ok {
@@ -90,6 +90,10 @@ func (mod *module) Open(driverID sobek.Value, connectionString string) (*Databas
 
 	db, err := sql.Open(database, connectionString)
 	if err != nil {
+		return nil, err
+	}
+
+	if err = opts.apply(db); err != nil {
 		return nil, err
 	}
 

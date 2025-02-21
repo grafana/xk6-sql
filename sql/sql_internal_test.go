@@ -15,16 +15,16 @@ func TestOpen(t *testing.T) { //nolint: paralleltest
 	driver := RegisterDriver("ramsql")
 	require.NotNil(t, driver)
 
-	db, err := mod.Open(driver, "")
+	db, err := mod.Open(driver, "", nil)
 
 	require.NoError(t, err)
 	require.NotNil(t, db)
 
-	_, err = mod.Open(sobek.New().ToValue("foo"), "testdb") // not a Symbol
+	_, err = mod.Open(sobek.New().ToValue("foo"), "testdb", nil) // not a Symbol
 
 	require.Error(t, err)
 
-	_, err = mod.Open(sobek.NewSymbol("ramsql"), "testdb") // not a registered Symbol
+	_, err = mod.Open(sobek.NewSymbol("ramsql"), "testdb", nil) // not a registered Symbol
 
 	require.Error(t, err)
 }
