@@ -2,6 +2,7 @@
 package sql
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -24,7 +25,7 @@ type rootModule struct{}
 
 // NewModuleInstance implements the modules.Module interface to return
 // a new instance for each VU.
-func (*rootModule) NewModuleInstance(_ modules.VU) modules.Instance {
+func (*rootModule) NewModuleInstance(vu modules.VU) modules.Instance {
 	instance := &module{}
 
 	instance.exports.Default = instance
@@ -32,12 +33,15 @@ func (*rootModule) NewModuleInstance(_ modules.VU) modules.Instance {
 		"open": instance.Open,
 	}
 
+	instance.vu = vu
+
 	return instance
 }
 
 // module represents an instance of the JavaScript module for every VU.
 type module struct {
 	exports modules.Exports
+	vu      modules.VU
 }
 
 // Exports is representation of ESM exports of a module.
@@ -97,17 +101,18 @@ func (mod *module) Open(driverID sobek.Value, connectionString string, opts *opt
 		return nil, err
 	}
 
-	return &Database{db: db}, nil
+	return &Database{db: db, ctx: mod.vu.Context}, nil
 }
 
 // Database is a database handle representing a pool of zero or more underlying connections.
 type Database struct {
-	db *sql.DB
+	db  *sql.DB
+	ctx func() context.Context
 }
 
 // Query executes a query that returns rows, typically a SELECT.
 func (dbase *Database) Query(query string, args ...interface{}) ([]KeyValue, error) {
-	rows, err := dbase.db.Query(query, args...)
+	rows, err := dbase.db.QueryContext(dbase.ctx(), query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -152,7 +157,7 @@ func (dbase *Database) Query(query string, args ...interface{}) ([]KeyValue, err
 
 // Exec a query without returning any rows.
 func (dbase *Database) Exec(query string, args ...interface{}) (sql.Result, error) {
-	return dbase.db.Exec(query, args...)
+	return dbase.db.ExecContext(dbase.ctx(), query, args...)
 }
 
 // Close the database and prevents new queries from starting.
