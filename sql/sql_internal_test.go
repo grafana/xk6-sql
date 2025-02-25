@@ -5,10 +5,13 @@ import (
 
 	"github.com/grafana/sobek"
 	"github.com/stretchr/testify/require"
+	"go.k6.io/k6/js/modulestest"
 )
 
 func TestOpen(t *testing.T) { //nolint: paralleltest
-	mod, ok := New().NewModuleInstance(nil).(*module)
+	rt := modulestest.NewRuntime(t)
+
+	mod, ok := New().NewModuleInstance(rt.VU).(*module)
 
 	require.True(t, ok)
 
