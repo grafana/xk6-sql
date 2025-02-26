@@ -1,6 +1,8 @@
 package sql
 
 import (
+	"context"
+	"runtime"
 	"testing"
 
 	"github.com/grafana/sobek"
@@ -22,6 +24,16 @@ func TestOpen(t *testing.T) { //nolint: paralleltest
 
 	require.NoError(t, err)
 	require.NotNil(t, db)
+
+	const expr = `CREATE TABLE address (id BIGSERIAL PRIMARY KEY, street TEXT, street_number INT);`
+
+	if runtime.GOOS != "windows" {
+		_, err = db.ExecWithTimeout("1ns", expr)
+		require.ErrorIs(t, err, context.DeadlineExceeded)
+
+		_, err = db.QueryWithTimeout("1ns", expr)
+		require.ErrorIs(t, err, context.DeadlineExceeded)
+	}
 
 	_, err = mod.Open(sobek.New().ToValue("foo"), "testdb", nil) // not a Symbol
 

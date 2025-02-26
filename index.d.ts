@@ -221,6 +221,48 @@ export interface Database {
    */
   exec(query: string, ...args: any[]): Result;
   /**
+   * Execute a query (with a timeout) without returning any rows.
+   * The timeout parameter is a duration string, a possibly signed sequence of decimal numbers,
+   * each with optional fraction and a unit suffix, such as "300ms", "-1.5h" or "2h45m".
+   * Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
+   * @param timeout the query timeout as a duration string
+   * @param query the query to execute
+   * @param args placeholder parameters in the query
+   * @returns summary of the executed SQL commands
+   * @example
+   *  ```ts file=examples/example.js
+   *  import sql from "k6/x/sql";
+   *
+   *  // the actual database driver should be used instead of ramsql
+   *  import driver from "k6/x/sql/driver/ramsql";
+   *
+   *  const db = sql.open(driver, "roster_db");
+   *
+   *  export function setup() {
+   *    db.exec(`
+   *      CREATE TABLE IF NOT EXISTS roster
+   *        (
+   *          id INTEGER PRIMARY KEY AUTOINCREMENT,
+   *          given_name VARCHAR NOT NULL,
+   *          family_name VARCHAR NOT NULL
+   *        );
+   *    `);
+   *
+   *    let result = db.execWithTimeout("10s", `
+   *      INSERT INTO roster
+   *        (given_name, family_name)
+   *      VALUES
+   *        ('Peter', 'Pan'),
+   *        ('Wendy', 'Darling'),
+   *        ('Tinker', 'Bell'),
+   *        ('James', 'Hook');
+   *    `);
+   *    console.log(`${result.rowsAffected()} rows inserted`);
+   *  }
+   * ```
+   */
+  execWithTimeout(timeout: string, query: string, ...args: any[]): Result;
+  /**
    * Query executes a query that returns rows, typically a SELECT.
    * @param query the query to execute
    * @param args placeholder parameters in the query
@@ -243,6 +285,33 @@ export interface Database {
    * ```
    */
   query(query: string, ...args: any[]): Row[];
+  /**
+   * Query executes a query (with a timeout) that returns rows, typically a SELECT.
+   * The timeout parameter is a duration string, a possibly signed sequence of decimal numbers,
+   * each with optional fraction and a unit suffix, such as "300ms", "-1.5h" or "2h45m".
+   * Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
+   * @param timeout the query timeout as a duration string
+   * @param query the query to execute
+   * @param args placeholder parameters in the query
+   * @returns rows of the query result
+   * @example
+   *  ```ts file=examples/example.js
+   *  import sql from "k6/x/sql";
+   *
+   *  // the actual database driver should be used instead of ramsql
+   *  import driver from "k6/x/sql/driver/ramsql";
+   *
+   *  const db = sql.open(driver, "roster_db");
+   *
+   *  export default function () {
+   *    let rows = db.queryWithTimeout("10s", "SELECT * FROM roster WHERE given_name = $1;", "Peter");
+   *    for (const row of results) {
+   *      console.log(`${row.family_name}, ${row.given_name}`);
+   *    }
+   *  }
+   * ```
+   */
+  queryWithTimeout(timeout: string, query: string, ...args: any[]): Row[];
 }
 
 /**
