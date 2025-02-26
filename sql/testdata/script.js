@@ -11,7 +11,7 @@ if (all_rows.length != 5) {
   throw new Error("Expected all five rows to be returned; got " + all_rows.length);
 }
 
-let one_row = db.query("SELECT * FROM test_table WHERE name = $1;", "name-2");
+let one_row = db.queryWithTimeout("10s", "SELECT * FROM test_table WHERE name = $1;", "name-2");
 if (one_row.length != 1) {
   throw new Error("Expected single row to be returned; got " + one_row.length);
 }

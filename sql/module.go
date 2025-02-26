@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/grafana/sobek"
 	"go.k6.io/k6/js/modules"
@@ -110,9 +111,19 @@ type Database struct {
 	ctx func() context.Context
 }
 
-// Query executes a query that returns rows, typically a SELECT.
-func (dbase *Database) Query(query string, args ...interface{}) ([]KeyValue, error) {
-	rows, err := dbase.db.QueryContext(dbase.ctx(), query, args...)
+func (dbase *Database) parseTimeout(timeout string) (context.Context, context.CancelFunc, error) {
+	dur, err := time.ParseDuration(timeout)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	ctx, cancel := context.WithTimeout(dbase.ctx(), dur)
+
+	return ctx, cancel, nil
+}
+
+func (dbase *Database) query(ctx context.Context, query string, args ...interface{}) ([]KeyValue, error) {
+	rows, err := dbase.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -155,9 +166,44 @@ func (dbase *Database) Query(query string, args ...interface{}) ([]KeyValue, err
 	return result, nil
 }
 
-// Exec a query without returning any rows.
+// Query executes a query that returns rows, typically a SELECT.
+func (dbase *Database) Query(query string, args ...interface{}) ([]KeyValue, error) {
+	return dbase.query(dbase.ctx(), query, args...)
+}
+
+// QueryWithTimeout executes a query (with a timeout) that returns rows, typically a SELECT.
+// The timeout can be specified as a duration string.
+func (dbase *Database) QueryWithTimeout(timeout string, query string, args ...interface{}) ([]KeyValue, error) {
+	ctx, cancel, err := dbase.parseTimeout(timeout)
+	if err != nil {
+		return nil, err
+	}
+
+	defer cancel()
+
+	return dbase.query(ctx, query, args...)
+}
+
+func (dbase *Database) exec(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
+	return dbase.db.ExecContext(ctx, query, args...)
+}
+
+// Exec executes a query without returning any rows.
 func (dbase *Database) Exec(query string, args ...interface{}) (sql.Result, error) {
-	return dbase.db.ExecContext(dbase.ctx(), query, args...)
+	return dbase.exec(dbase.ctx(), query, args...)
+}
+
+// ExecWithTimeout executes a query (with a timeout) without returning any rows.
+// The timeout can be specified as a duration string.
+func (dbase *Database) ExecWithTimeout(timeout string, query string, args ...interface{}) (sql.Result, error) {
+	ctx, cancel, err := dbase.parseTimeout(timeout)
+	if err != nil {
+		return nil, err
+	}
+
+	defer cancel()
+
+	return dbase.exec(ctx, query, args...)
 }
 
 // Close the database and prevents new queries from starting.
