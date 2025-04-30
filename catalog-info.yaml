@@ -6,7 +6,6 @@ metadata:
   description: |
     xk6-sql is a Grafana k6 extension that enables the use of SQL databases in k6 tests.
   annotations:
-    backstage.io/techdocs-ref: dir:.
     github.com/project-slug: grafana/xk6-sql
 spec:
   type: library
