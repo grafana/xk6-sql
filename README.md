@@ -12,21 +12,21 @@ xk6-sql is a [Grafana k6 extension](https://grafana.com/docs/k6/latest/extension
 
 Check out the API documentation [here](https://sql.x.k6.io). The TypeScript declaration file can be downloaded from [here](https://sql.x.k6.io/index.d.ts).
 
-> [!NOTE]
-> To use the TypeScript declaration file in your IDE (e.g. Visual Studio Code), you need to create a `jsconfig.json` (or `tsconfig.json`) file with the following content:
->
-> ```json file=examples/jsconfig.json
-> {
->  "compilerOptions": {
->    "target": "ES6",
->    "module": "ES6",
->    "paths": {
->      "k6/x/sql": ["./typings/xk6-sql/index.d.ts"]
->    }
->  }
->}
->```
-> You will need to update the TypeScript declaration file location in the example above to where you downloaded it.
+To use the TypeScript declaration file in your IDE (e.g. Visual Studio Code), you need to create a `jsconfig.json` (or `tsconfig.json`) file with the following content:
+
+```json file=examples/jsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ES6",
+    "paths": {
+      "k6/x/sql": ["./typings/xk6-sql/index.d.ts"]
+    }
+  }
+}
+```
+
+You will need to update the TypeScript declaration file location in the example above to where you downloaded it.
 
 ## Usage
 
@@ -77,39 +77,6 @@ export default function () {
   }
 }
 ```
-
-<details>
-<summary><b>output</b></summary>
-
-```bash file=examples/example.txt
-
-         /\      Grafana   /‾‾/  
-    /\  /  \     |\  __   /  /   
-   /  \/    \    | |/ /  /   ‾‾\ 
-  /          \   |   (  |  (‾)  |
- / __________ \  |_|\_\  \_____/ 
-
-     execution: local
-        script: examples/example.js
-        output: -
-
-     scenarios: (100.00%) 1 scenario, 1 max VUs, 10m30s max duration (incl. graceful stop):
-              * default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)
-
-time="2024-10-21T15:47:50+02:00" level=info msg="4 rows inserted" source=console
-time="2024-10-21T15:47:50+02:00" level=info msg="Pan, Peter" source=console
-
-     data_received........: 0 B 0 B/s
-     data_sent............: 0 B 0 B/s
-     iteration_duration...: avg=371.25µs min=371.25µs med=371.25µs max=371.25µs p(90)=371.25µs p(95)=371.25µs
-     iterations...........: 1   1061.969082/s
-
-
-running (00m00.0s), 0/1 VUs, 1 complete and 0 interrupted iterations
-default ✓ [ 100% ] 1 VUs  00m00.0s/10m0s  1/1 iters, 1 per VU
-```
-
-</details>
 
 ## Build
 
