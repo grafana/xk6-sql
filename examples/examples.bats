@@ -14,7 +14,7 @@ setup() {
 }
 
 @test 'example.js' {
-  $EXE run examples/example.js >examples/example.txt 2>&1
-  [ $? -eq 0 ]
-  grep -q 'msg="Pan, Peter"' examples/example.txt
+  run $EXE run example.js
+  [ $status -eq 0 ]
+  echo "$output" | grep -q 'msg="Pan, Peter"'
 }
