@@ -1,5 +1,7 @@
 name: Validate
 
+permissions: {}
+
 on:
   workflow_dispatch:
   push:
@@ -7,9 +9,17 @@ on:
   pull_request:
     branches: ["main", "master"]
 
-permissions: {}
-
 jobs:
   validate:
     name: Validate
-    uses: grafana/k6-extension-workflows/.github/workflows/validate.yml@v0.2.1
+    uses: grafana/xk6/.github/workflows/extension-validate.yml@v0.19.2
+    permissions:
+      pages: write
+      id-token: write
+    with:
+      go-version: ${{vars.GO_VERSION}}
+      go-versions: ${{vars.GO_VERSIONS}}
+      golangci-lint-version: ${{vars.GOLANGCI_LINT_VERSION}}
+      platforms: ${{vars.PLATFORMS}}
+      k6-versions: ${{vars.K6_VERSIONS}}
+      xk6-version: ${{vars.XK6_VERSION}}
