@@ -111,6 +111,19 @@ The `Makefile` is generated from the task list defined in the `CONTRIBUTING.md` 
 make makefile
 ```
 
+### security - Run security and vulnerability checks
+
+The [gosec] tool is used for security checks. The [govulncheck] tool is used to check the vulnerability of dependencies.
+
+```bash
+gosec -quiet ./...
+govulncheck ./...
+```
+
+[gosec]: https://github.com/securego/gosec
+[govulncheck]: https://github.com/golang/vuln
+[security]: <#security---run-security-and-vulnerability-checks>
+
 ### lint - Run the linter
 
 The [golangci-lint] tool is used for static analysis of the source code. It is advisable to run it before committing the changes.
@@ -119,6 +132,7 @@ The [golangci-lint] tool is used for static analysis of the source code. It is a
 golangci-lint run
 ```
 
+[lint]: <#lint---run-the-linter>
 [golangci-lint]: https://github.com/golangci/golangci-lint
 
 ### test - Run the tests
@@ -172,6 +186,7 @@ mdcode update
 ```
 
 [mdcode]: <https://github.com/szkiba/mdcode>
+[readme]: #readme---update-readmemd
 
 ### clean - Clean the working directory
 
@@ -193,12 +208,12 @@ bun x typedoc --out build/docs
 
 [doc]: #doc---generate-api-documentation
 
-### all - Clean build
+### all - Run all
 
 Performs the most important tasks. It can be used to check whether the CI workflow will run successfully.
 
 Requires
-: [clean], [format], [test], [build], [doc]
+: [clean], [lint], [security], [test], [build], [doc], [example], [readme], [makefile]
 
 ### format - Format the go source codes
 

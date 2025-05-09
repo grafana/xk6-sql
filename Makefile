@@ -8,7 +8,7 @@ __help__:
 	@echo 'Usage: make [target]'
 	@echo ''
 	@echo 'Targets:'
-	@echo '  all      Clean build'
+	@echo '  all      Run all'
 	@echo '  build    Build custom k6 with extension'
 	@echo '  clean    Clean the working directory'
 	@echo '  coverage View the test coverage report'
@@ -18,11 +18,12 @@ __help__:
 	@echo '  lint     Run the linter'
 	@echo '  makefile Generate the Makefile'
 	@echo '  readme   Update README.md'
+	@echo '  security Run security and vulnerability checks'
 	@echo '  test     Run the tests'
 
-# Clean build
+# Run all
 .PHONY: all
-all: clean format test build doc
+all: clean lint security test build doc example readme makefile
 
 # Build custom k6 with extension
 .PHONY: build
@@ -85,6 +86,14 @@ makefile:
 readme: 
 	@(\
 		mdcode update;\
+	)
+
+# Run security and vulnerability checks
+.PHONY: security
+security: 
+	@(\
+		gosec -quiet ./...;\
+		govulncheck ./...;\
 	)
 
 # Run the tests
