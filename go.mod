@@ -5,7 +5,7 @@ go 1.23.0
 require (
 	github.com/grafana/sobek v0.0.0-20250723111835-dd8a13f0d439
 	github.com/proullon/ramsql v0.1.4
-	github.com/stretchr/testify v1.11.0
+	github.com/stretchr/testify v1.11.1
 	go.k6.io/k6 v1.2.1
 )
 
