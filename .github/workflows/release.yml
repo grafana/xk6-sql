@@ -14,11 +14,11 @@ jobs:
       contents: write
     with:
       cgo: true
-      go-version: ${{vars.GO_VERSION}}
-      k6-version: ${{vars.K6_VERSION}}
-      xk6-version: ${{vars.XK6_VERSION}}
-      os: ${{vars.OS}}
-      arch: ${{vars.ARCH}}
+      go-version: "1.24.x"
+      os: '["linux", "windows", "darwin"]'
+      arch: '["amd64", "arm64"]'
+      k6-version: "v1.2.3"
+      xk6-version: "1.1.4"
       with: |
         github.com/grafana/xk6-sql-driver-ramsql
         github.com/grafana/xk6-sql-driver-sqlite3
