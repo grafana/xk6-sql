@@ -278,7 +278,7 @@ export interface Database {
    *
    *  export default function () {
    *    let rows = db.query("SELECT * FROM roster WHERE given_name = $1;", "Peter");
-   *    for (const row of results) {
+   *    for (const row of rows) {
    *      console.log(`${row.family_name}, ${row.given_name}`);
    *    }
    *  }
@@ -305,7 +305,7 @@ export interface Database {
    *
    *  export default function () {
    *    let rows = db.queryWithTimeout("10s", "SELECT * FROM roster WHERE given_name = $1;", "Peter");
-   *    for (const row of results) {
+   *    for (const row of rows) {
    *      console.log(`${row.family_name}, ${row.given_name}`);
    *    }
    *  }
@@ -335,7 +335,7 @@ export interface Row {
    *
    *  export default function () {
    *    let rows = db.query("SELECT * FROM roster WHERE given_name = $1;", "Peter");
-   *    for (const row of results) {
+   *    for (const row of rows) {
    *      console.log(`${row.family_name}, ${row.given_name}`);
    *    }
    *  }
