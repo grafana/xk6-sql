@@ -18,7 +18,7 @@ jobs:
       os: '["linux", "windows", "darwin"]'
       arch: '["amd64", "arm64"]'
       k6-version: "v1.3.0"
-      xk6-version: "1.1.4"
+      xk6-version: "1.2.3"
       with: |
         github.com/grafana/xk6-sql-driver-ramsql
         github.com/grafana/xk6-sql-driver-sqlite3
