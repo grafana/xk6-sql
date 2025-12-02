@@ -5,8 +5,8 @@
   "repository": "github:grafana/xk6-sql",
   "license": "AGPL-3.0-only",
   "devDependencies": {
-    "@types/k6": "^1.0.0",
-    "k6": "^0.0.0"
+    "@types/k6": "1.4.0",
+    "k6": "0.0.0"
   },
   "files": [
     "index.d.ts"

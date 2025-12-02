@@ -9,7 +9,7 @@ permissions: {}
 jobs:
   release:
     name: Release
-    uses: grafana/xk6/.github/workflows/extension-release.yml@v1.2.3
+    uses: grafana/xk6/.github/workflows/extension-release.yml@0099162985dd601cd68d44ed19771e45a0c3e2b1 # v1.2.3
     permissions:
       contents: write
     with:
