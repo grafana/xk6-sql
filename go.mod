@@ -2,8 +2,6 @@ module github.com/grafana/xk6-sql
 
 go 1.24.0
 
-toolchain go1.24.11
-
 require (
 	github.com/grafana/sobek v0.0.0-20251124090928-9a028a30ff58
 	github.com/proullon/ramsql v0.1.4
