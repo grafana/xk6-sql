@@ -17,8 +17,8 @@ jobs:
       go-version: "1.25.x"
       os: '["linux", "windows", "darwin"]'
       arch: '["amd64", "arm64"]'
-      k6-version: "v1.3.0"
-      xk6-version: "1.2.3"
+      k6-version: "v1.4.2"
+      xk6-version: "1.3.1"
       with: |
         github.com/grafana/xk6-sql-driver-ramsql
         github.com/grafana/xk6-sql-driver-sqlite3
