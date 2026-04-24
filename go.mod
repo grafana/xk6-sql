@@ -3,10 +3,10 @@ module github.com/grafana/xk6-sql
 go 1.25.0
 
 require (
-	github.com/grafana/sobek v0.0.0-20260121195222-d8d9202018c5
+	github.com/grafana/sobek v0.0.0-20260219184149-bdae4a158e94
 	github.com/proullon/ramsql v0.1.4
 	github.com/stretchr/testify v1.11.1
-	go.k6.io/k6 v1.6.1
+	go.k6.io/k6 v1.7.1
 )
 
 require (
