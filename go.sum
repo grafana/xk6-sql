@@ -31,8 +31,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f h1:lO4WD4F/rVNCu3HqELle0jiPLLBs70cWOduZpkS1E78=
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f/go.mod h1:cuUVRXasLTGF7a8hSLbxyZXjz+1KgoB3wDUb6vlszIc=
-github.com/dlclark/regexp2 v1.11.5 h1:Q/sSnsKerHeCkc/jSTNq1oCm7KiVgUMZRDUoRu0JQZQ=
-github.com/dlclark/regexp2 v1.11.5/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
+github.com/dlclark/regexp2 v1.12.0 h1:0j4c5qQmnC6XOWNjP3PIXURXN2gWx76rd3KvgdPkCz8=
+github.com/dlclark/regexp2 v1.12.0/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
 github.com/evanw/esbuild v0.27.2 h1:3xBEws9y/JosfewXMM2qIyHAi+xRo8hVx475hVkJfNg=
 github.com/evanw/esbuild v0.27.2/go.mod h1:D2vIQZqV/vIf/VRHtViaUtViZmG7o+kKmlBfVQuRi48=
 github.com/fatih/color v1.18.0 h1:S8gINlzdQ840/4pfAwic/ZE0djQEH3wM94VfqLTZcOM=
@@ -66,8 +66,8 @@ github.com/grafana/k6build v0.5.15 h1:4I5dkAWSMvXsElS1OpLbHj6ZXnebXZGnmwDXy5vcwS
 github.com/grafana/k6build v0.5.15/go.mod h1:Sk7SUiCnx2AgkirG3PrCtmJKYL+a8EeRdTzFfbxP0X8=
 github.com/grafana/k6provider v0.2.0 h1:Zu8FBnk6cJyTTkpCA+y+Ravc2YFeAQjsIfPpcbZtfB0=
 github.com/grafana/k6provider v0.2.0/go.mod h1:TJ6vzPm4yDQ2ji/Fet0dFOpdjktrKZp4hsnLZhRoZVA=
-github.com/grafana/sobek v0.0.0-20260121195222-d8d9202018c5 h1:6JUHN2Uog3MAgRLIF0H6dHCeSGmdbgh288IQ4cEaP90=
-github.com/grafana/sobek v0.0.0-20260121195222-d8d9202018c5/go.mod h1:YtuqiJX1W3XvRSilL/kUZzduJG3phPJWyzM9DiIEfBo=
+github.com/grafana/sobek v0.0.0-20260429085637-a66d4790012b h1:mM/qn1luOrRZHT3G+405JMdCx4mGxeLKpOkVBa5+lFw=
+github.com/grafana/sobek v0.0.0-20260429085637-a66d4790012b/go.mod h1:8pB+ag4SAbqtDxh1LNTeUI62/5f8mmEACImwbDHoUC0=
 github.com/grafana/xk6-dashboard v0.7.13 h1:jYD0zbxrYgz3hckRgoZ8nbd6AXYZhFvJk4WCdcMVvFw=
 github.com/grafana/xk6-dashboard v0.7.13/go.mod h1:D+k5+Nf836MHpELDqGxUs9eCRAOYE+d5HYM9zDwdILw=
 github.com/grafana/xk6-redis v0.3.6 h1:RS7AZwiHqIxU2gb4PxkZnqspI75xffRSKKldc6znjIg=
