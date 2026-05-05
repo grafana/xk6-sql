@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/grafana/sobek"
-	"go.k6.io/k6/js/modules"
+	"go.k6.io/k6/v2/js/modules"
 )
 
 // ImportPath contains module's JavaScript import path.

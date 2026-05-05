@@ -7,9 +7,9 @@ import (
 	"github.com/grafana/sobek"
 	"github.com/grafana/xk6-sql/sql"
 	"github.com/stretchr/testify/require"
-	"go.k6.io/k6/ext"
-	"go.k6.io/k6/js/modules"
-	"go.k6.io/k6/js/modulestest"
+	"go.k6.io/k6/v2/ext"
+	"go.k6.io/k6/v2/js/modules"
+	"go.k6.io/k6/v2/js/modulestest"
 )
 
 // RunScript executes JavaScript code in a specially initialized interpreter.
