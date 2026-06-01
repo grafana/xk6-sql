@@ -1,7 +1,7 @@
 {
   "name": "xk6-sql",
   "version": "1.0.5",
-  "packageManager": "npm@10.9.2",
+  "packageManager": "npm@10.9.8",
   "description": "Use SQL databases from k6 tests",
   "repository": "github:grafana/xk6-sql",
   "license": "AGPL-3.0-only",
