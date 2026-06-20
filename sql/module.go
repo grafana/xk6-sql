@@ -30,7 +30,7 @@ func (*rootModule) NewModuleInstance(vu modules.VU) modules.Instance {
 	instance := &module{}
 
 	instance.exports.Default = instance
-	instance.exports.Named = map[string]interface{}{
+	instance.exports.Named = map[string]any{
 		"open": instance.Open,
 	}
 
@@ -51,7 +51,7 @@ func (mod *module) Exports() modules.Exports {
 }
 
 // KeyValue is a simple key-value pair.
-type KeyValue map[string]interface{}
+type KeyValue map[string]any
 
 func asSymbol(value sobek.Value) (*sobek.Symbol, bool) {
 	sym, ok := value.(*sobek.Symbol)
@@ -112,13 +112,13 @@ type Database struct {
 }
 
 // Query executes a query that returns rows, typically a SELECT.
-func (dbase *Database) Query(query string, args ...interface{}) ([]KeyValue, error) {
+func (dbase *Database) Query(query string, args ...any) ([]KeyValue, error) {
 	return dbase.query(dbase.ctx(), query, args...)
 }
 
 // QueryWithTimeout executes a query (with a timeout) that returns rows, typically a SELECT.
 // The timeout can be specified as a duration string.
-func (dbase *Database) QueryWithTimeout(timeout string, query string, args ...interface{}) ([]KeyValue, error) {
+func (dbase *Database) QueryWithTimeout(timeout string, query string, args ...any) ([]KeyValue, error) {
 	ctx, cancel, err := dbase.parseTimeout(timeout)
 	if err != nil {
 		return nil, err
@@ -130,13 +130,13 @@ func (dbase *Database) QueryWithTimeout(timeout string, query string, args ...in
 }
 
 // Exec executes a query without returning any rows.
-func (dbase *Database) Exec(query string, args ...interface{}) (sql.Result, error) {
+func (dbase *Database) Exec(query string, args ...any) (sql.Result, error) {
 	return dbase.exec(dbase.ctx(), query, args...)
 }
 
 // ExecWithTimeout executes a query (with a timeout) without returning any rows.
 // The timeout can be specified as a duration string.
-func (dbase *Database) ExecWithTimeout(timeout string, query string, args ...interface{}) (sql.Result, error) {
+func (dbase *Database) ExecWithTimeout(timeout string, query string, args ...any) (sql.Result, error) {
 	ctx, cancel, err := dbase.parseTimeout(timeout)
 	if err != nil {
 		return nil, err
@@ -163,7 +163,7 @@ func (dbase *Database) parseTimeout(timeout string) (context.Context, context.Ca
 	return ctx, cancel, nil
 }
 
-func (dbase *Database) query(ctx context.Context, query string, args ...interface{}) ([]KeyValue, error) {
+func (dbase *Database) query(ctx context.Context, query string, args ...any) ([]KeyValue, error) {
 	rows, err := dbase.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
@@ -182,8 +182,8 @@ func (dbase *Database) query(ctx context.Context, query string, args ...interfac
 		return nil, err
 	}
 
-	values := make([]interface{}, len(cols))
-	valuePtrs := make([]interface{}, len(cols))
+	values := make([]any, len(cols))
+	valuePtrs := make([]any, len(cols))
 	result := make([]KeyValue, 0)
 
 	for rows.Next() {
@@ -198,7 +198,7 @@ func (dbase *Database) query(ctx context.Context, query string, args ...interfac
 
 		data := make(KeyValue, len(cols))
 		for i, colName := range cols {
-			data[colName] = *valuePtrs[i].(*interface{}) //nolint:forcetypeassert
+			data[colName] = *valuePtrs[i].(*any) //nolint:forcetypeassert
 		}
 
 		result = append(result, data)
@@ -207,7 +207,7 @@ func (dbase *Database) query(ctx context.Context, query string, args ...interfac
 	return result, nil
 }
 
-func (dbase *Database) exec(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
+func (dbase *Database) exec(ctx context.Context, query string, args ...any) (sql.Result, error) {
 	return dbase.db.ExecContext(ctx, query, args...)
 }
 
