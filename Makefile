@@ -8,9 +8,8 @@ SHELL=bash
 # $(LINT_PATCH). See grafana/k6-ci/README.md.
 WORKFLOW   ?= .github/workflows/all.yml
 K6_CI_REF  := $(shell grep -oE 'grafana/k6-ci/[^@[:space:]]+@[A-Za-z0-9._/-]+' $(WORKFLOW) | head -n1 | cut -d@ -f2)
-LINT_DIR   ?= build/lint
-LINT_BASE  := $(LINT_DIR)/.golangci-base.yml
-LINT_FINAL := $(LINT_DIR)/.golangci.yml
+LINT_BASE  ?= .golangci-base.yml
+LINT_FINAL ?= .golangci.yml
 LINT_PATCH ?= .golangci.patch
 
 .PHONY: __help__
@@ -81,10 +80,9 @@ format:
 .PHONY: lint
 lint: 
 	@(\
-		mkdir -p $(LINT_DIR);\
 		curl -fsSL https://raw.githubusercontent.com/grafana/k6-ci/$(K6_CI_REF)/.golangci.yml -o $(LINT_BASE);\
 		cp $(LINT_BASE) $(LINT_FINAL);\
-		if [ -f $(LINT_PATCH) ]; then echo "Applying $(LINT_PATCH)"; git apply --directory=$(LINT_DIR) $(LINT_PATCH); fi;\
+		if [ -f $(LINT_PATCH) ]; then echo "Applying $(LINT_PATCH)"; git apply $(LINT_PATCH); fi;\
 		go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$$(head -n1 $(LINT_BASE) | tr -d '# ') run --config=$(LINT_FINAL) ./...;\
 	)
 
@@ -100,7 +98,7 @@ update-lint-patch:
 .PHONY: clean-lint
 clean-lint: 
 	@(\
-		rm -rf $(LINT_DIR);\
+		rm -f $(LINT_BASE) $(LINT_FINAL);\
 	)
 
 # Generate the Makefile
