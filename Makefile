@@ -4,13 +4,10 @@ SHELL=bash
 .SHELLFLAGS=-e -o pipefail -c
 
 # k6-ci golangci-lint config. `make lint` downloads .golangci.yml from
-# grafana/k6-ci at the ref pinned in $(WORKFLOW) and applies the optional
-# $(LINT_PATCH). See grafana/k6-ci/README.md.
-WORKFLOW   ?= .github/workflows/all.yml
-K6_CI_REF  := $(shell grep -oE 'grafana/k6-ci/[^@[:space:]]+@[A-Za-z0-9._/-]+' $(WORKFLOW) | head -n1 | cut -d@ -f2)
-LINT_BASE  ?= .golangci-base.yml
-LINT_FINAL ?= .golangci.yml
-LINT_PATCH ?= .golangci.patch
+# grafana/k6-ci at the ref pinned in $(WORKFLOW). See grafana/k6-ci/README.md.
+WORKFLOW    ?= .github/workflows/all.yml
+K6_CI_REF   := $(shell grep -oE 'grafana/k6-ci/[^@[:space:]]+@[A-Za-z0-9._/-]+' $(WORKFLOW) | head -n1 | cut -d@ -f2)
+LINT_CONFIG ?= .golangci.yml
 
 .PHONY: __help__
 __help__:
@@ -80,25 +77,8 @@ format:
 .PHONY: lint
 lint: 
 	@(\
-		curl -fsSL https://raw.githubusercontent.com/grafana/k6-ci/$(K6_CI_REF)/.golangci.yml -o $(LINT_BASE);\
-		cp $(LINT_BASE) $(LINT_FINAL);\
-		if [ -f $(LINT_PATCH) ]; then echo "Applying $(LINT_PATCH)"; git apply $(LINT_PATCH); fi;\
-		go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$$(head -n1 $(LINT_BASE) | tr -d '# ') run --config=$(LINT_FINAL) ./...;\
-	)
-
-# Regenerate $(LINT_PATCH) from the locally edited $(LINT_FINAL)
-.PHONY: update-lint-patch
-update-lint-patch: 
-	@(\
-		if [ ! -f $(LINT_FINAL) ]; then echo "Run 'make lint' first to materialize $(LINT_FINAL), edit it, then re-run."; exit 1; fi;\
-		diff -u --label a/.golangci.yml --label b/.golangci.yml $(LINT_BASE) $(LINT_FINAL) > $(LINT_PATCH) || true;\
-	)
-
-# Remove the downloaded/assembled lint config
-.PHONY: clean-lint
-clean-lint: 
-	@(\
-		rm -f $(LINT_BASE) $(LINT_FINAL);\
+		curl -fsSL https://raw.githubusercontent.com/grafana/k6-ci/$(K6_CI_REF)/.golangci.yml -o $(LINT_CONFIG);\
+		go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$$(head -n1 $(LINT_CONFIG) | tr -d '# ') run --config=$(LINT_CONFIG) ./...;\
 	)
 
 # Generate the Makefile
@@ -129,4 +109,3 @@ test:
 	@(\
 		go test -count 1 -race -coverprofile=coverage.txt -timeout 60s ./...;\
 	)
-
