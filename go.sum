@@ -126,8 +126,8 @@ github.com/prometheus/common v0.70.1 h1:1HvjP4D5oL3t8RsPlwxA9onvvStjtIHYE5XuuwOi
 github.com/prometheus/common v0.70.1/go.mod h1:VdFUQDMZK3VLkurFUVhia6uys/0suUp86TJz5qbJRhc=
 github.com/prometheus/procfs v0.21.1 h1:GljZCt+zSTS+NZq88cyQ1LjZ+RCHp3uVuabBWA5+OJI=
 github.com/prometheus/procfs v0.21.1/go.mod h1:aB55Cww9pdSJVHk0hUf0inxWyyjPogFIjmHKYgMKmtY=
-github.com/proullon/ramsql v0.1.4 h1:yTFRTn46gFH/kPbzCx+mGjuFlyTBUeDr3h2ldwxddl0=
-github.com/proullon/ramsql v0.1.4/go.mod h1:CFGqeQHQpdRfWqYmWD3yXqPTEaHkF4zgXy1C6qDWc9E=
+github.com/proullon/ramsql v0.1.5 h1:MPq7HGPLRc1/lswnNluVlfaqJjkE4tuudzhir8hUrvk=
+github.com/proullon/ramsql v0.1.5/go.mod h1:27sqYAA7SL5VjwThNQpQ2l0krg/QwofIrOGEK2yoCfc=
 github.com/r3labs/sse/v2 v2.10.0 h1:hFEkLLFY4LDifoHdiCN/LlGBAdVJYsANaLqNYa1l/v0=
 github.com/r3labs/sse/v2 v2.10.0/go.mod h1:Igau6Whc+F17QUgML1fYe1VPZzTV6EMCnYktEmkNJ7I=
 github.com/serenize/snaker v0.0.0-20201027110005-a7ad2135616e h1:zWKUYT07mGmVBH+9UgnHXd/ekCK99C8EbDSAt5qsjXE=

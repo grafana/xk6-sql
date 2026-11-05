@@ -6,7 +6,7 @@ toolchain go1.26.10
 
 require (
 	github.com/grafana/sobek v0.0.0-20260908083152-4698bc773ae7
-	github.com/proullon/ramsql v0.1.4
+	github.com/proullon/ramsql v0.1.5
 	github.com/stretchr/testify v1.12.1
 	go.k6.io/k6/v2 v2.3.0
 )
