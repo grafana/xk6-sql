@@ -2,7 +2,7 @@ module github.com/grafana/xk6-sql
 
 go 1.26.0
 
-toolchain go1.26.10
+toolchain go1.26.11
 
 require (
 	github.com/grafana/sobek v0.0.0-20260908083152-4698bc773ae7
