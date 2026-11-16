@@ -6,6 +6,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/grafana/sobek"
@@ -182,6 +184,11 @@ func (dbase *Database) query(ctx context.Context, query string, args ...any) ([]
 		return nil, err
 	}
 
+	colTypes, err := rows.ColumnTypes()
+	if err != nil {
+		return nil, err
+	}
+
 	values := make([]any, len(cols))
 	valuePtrs := make([]any, len(cols))
 	result := make([]KeyValue, 0)
@@ -198,13 +205,46 @@ func (dbase *Database) query(ctx context.Context, query string, args ...any) ([]
 
 		data := make(KeyValue, len(cols))
 		for i, colName := range cols {
-			data[colName] = *valuePtrs[i].(*any) //nolint:forcetypeassert
+			data[colName] = convertValue(colTypes[i].DatabaseTypeName(), *valuePtrs[i].(*any)) //nolint:forcetypeassert
 		}
 
 		result = append(result, data)
 	}
 
 	return result, nil
+}
+
+// convertValue turns the raw bytes some drivers return into a value that is
+// useful in JavaScript. The MySQL driver, for example, returns every column
+// of a text protocol result as []byte, which would otherwise reach the script
+// as an array of character codes. Binary columns are left untouched.
+func convertValue(typeName string, value any) any {
+	raw, ok := value.([]byte)
+	if !ok {
+		return value
+	}
+
+	name := strings.ToUpper(typeName)
+
+	switch {
+	case strings.Contains(name, "BINARY"), strings.Contains(name, "BLOB"),
+		name == "BYTEA", name == "BIT", name == "GEOMETRY":
+		return value
+	case strings.Contains(name, "INT"), name == "YEAR":
+		if strings.HasPrefix(name, "UNSIGNED") {
+			if n, err := strconv.ParseUint(string(raw), 10, 64); err == nil {
+				return n
+			}
+		} else if n, err := strconv.ParseInt(string(raw), 10, 64); err == nil {
+			return n
+		}
+	case name == "FLOAT", name == "DOUBLE", name == "REAL":
+		if f, err := strconv.ParseFloat(string(raw), 64); err == nil {
+			return f
+		}
+	}
+
+	return string(raw)
 }
 
 func (dbase *Database) exec(ctx context.Context, query string, args ...any) (sql.Result, error) {
